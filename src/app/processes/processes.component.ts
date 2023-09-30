@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Node, Edge, ClusterNode, Layout } from '@swimlane/ngx-graph';
 import { nodess, clusterss, linkss } from './data';
-import {uklad} from './MyLayout'
+import {myLayout} from './MyLayout'
 import * as shape from 'd3-shape';
+import customCurve from './MyCurve';
 
 @Component({
   selector: 'app-processes',
@@ -10,10 +11,9 @@ import * as shape from 'd3-shape';
   styleUrls: ['./processes.component.scss']
 })
 export class ProcessesComponent {
-  // uklad = new uklad();
-  public layout: Layout = new uklad ();
+  public layout: Layout = new myLayout ();
 
-  // myCurve: any = customCurve;
+  myCurve: any = customCurve;
   // myCurve: any = shape.curveStepAfter;
   // myCurve: any = shape.curveStepBefore;
   // myCurve: any = shape.curveStep;

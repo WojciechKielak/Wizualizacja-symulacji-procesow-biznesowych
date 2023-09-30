@@ -34,7 +34,7 @@ export enum Orientation {
   }
   
 
-export class uklad implements Layout {
+export class myLayout implements Layout {
 
       defaultSettings: DagreSettings = {
         orientation: Orientation.LEFT_TO_RIGHT,
