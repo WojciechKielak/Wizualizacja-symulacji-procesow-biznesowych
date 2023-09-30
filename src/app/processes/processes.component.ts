@@ -25,4 +25,11 @@ export class ProcessesComponent {
 
 
   clusters: ClusterNode[] = clusterss;
+
+  diamondPoints(width: number, height: number): string {
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
+  
+    return `0,${halfHeight} ${halfWidth},0 ${width},${halfHeight} ${halfWidth},${height} 0,${halfHeight}`;
+  }
 }
