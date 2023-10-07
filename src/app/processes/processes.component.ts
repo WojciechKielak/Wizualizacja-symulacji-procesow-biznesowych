@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Node, Edge, ClusterNode, Layout } from '@swimlane/ngx-graph';
-import { nodess, clusterss, linkss } from './data';
+import { nodes, clusters, links, nodess, clusterss, linkss } from './data';
 import {myLayout} from './MyLayout'
 import * as shape from 'd3-shape';
 import customCurve from './MyCurve';
@@ -18,18 +18,21 @@ export class ProcessesComponent {
   // myCurve: any = shape.curveStepBefore;
   // myCurve: any = shape.curveStep;
 
-  nodes: Node[] = nodess;
-
-
-  links: Edge[] = linkss;
-
-
-  clusters: ClusterNode[] = clusterss;
+  nodes: Node[] = nodes;
+  links: Edge[] = links;
+  clusters: ClusterNode[] = clusters;
 
   diamondPoints(width: number, height: number): string {
     const halfWidth = width / 2;
     const halfHeight = height / 2;
   
     return `0,${halfHeight} ${halfWidth},0 ${width},${halfHeight} ${halfWidth},${height} 0,${halfHeight}`;
+  }
+
+  change(){
+    this.nodes=nodess;
+    this.links=linkss;
+    this.clusters = clusterss;
+    console.log(this.nodes);
   }
 }

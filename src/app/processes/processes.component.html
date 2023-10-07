@@ -1,3 +1,13 @@
+<button (click)="change()" type="submit">Start</button>
+<div>
+    <button>Stop</button>
+</div>
+<div>
+  <button>Reset</button>
+</div>
+<div>
+  <button routerLink="/models">Powrót</button>
+</div>
 <p>processes works!</p>
 <mat-icon>perm_identity</mat-icon>
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
@@ -60,7 +70,7 @@
         [attr.cx]="node.dimension.width / 2"
         [attr.cy]="node.dimension.height / 2"
         [attr.r]="node.dimension.height/ 2"
-        [attr.fill]="node.data.color2"
+        [attr.fill]="'green'"
 
       />
 
@@ -79,8 +89,8 @@
 
         <svg:foreignObject
         *ngIf="node.data.task==='user'"
-        [attr.width]="node.dimension.width"
-        [attr.height]="node.dimension.height"
+        [attr.width]="node.dimension.width/2"
+        [attr.height]="node.dimension.height/2"
         [attr.y]="'-2px'"
       >
         <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">

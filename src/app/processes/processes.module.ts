@@ -5,6 +5,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {MatIconModule} from '@angular/material/icon';
     NgxGraphModule,
     BrowserAnimationsModule,
     NoopAnimationsModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ]
 })
 export class ProcessesModule { }

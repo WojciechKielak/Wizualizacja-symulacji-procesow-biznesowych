@@ -75,9 +75,11 @@ export class myLayout implements Layout {
           // console.log(this.clusterID);
         }
         // console.log(dagreNode);
-        if(dagreNode.data.shape === 'diamond'){
+        if(dagreNode.data.shape === 'diamond' && dagreNode.dimension.height< 40 && dagreNode.dimension.width<40){
+          // console.log(dagreNode.dimension.height + "  "+ dagreNode.dimension.width + " "+ dagreNode.id)
           dagreNode.dimension.height= 1.5 * dagreNode.dimension.height;
           dagreNode.dimension.width= 1.5 * dagreNode.dimension.width;
+          // console.log(dagreNode.dimension.height + "  "+ dagreNode.dimension.width + " "+ dagreNode.id)
         }
 
           return {

@@ -70,7 +70,8 @@
               "browserTarget": "vbps:build:production"
             },
             "development": {
-              "browserTarget": "vbps:build:development"
+              "browserTarget": "vbps:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
