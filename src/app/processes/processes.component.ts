@@ -35,4 +35,5 @@ export class ProcessesComponent {
     this.clusters = clusterss;
     console.log(this.nodes);
   }
+  // const roomId = this.route.snapshot.paramMap.get('roomid');
 }

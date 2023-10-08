@@ -1,4 +1,26 @@
 <p>models works!</p>
-<button routerLink="/processes">Symuluj</button>
+<!-- <button routerLink="/processes">Symuluj</button> -->
+<!-- <button [routerLink]=['/processes',organization.id]>Symuluj</button> -->
+<button class="btn btn-primary" 
+        [routerLink]="['/processes', org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : '']">
+  Symuluj
+</button>
 
+<mat-selection-list #org [multiple]="false">
+    <mat-list-option *ngFor="let organization of organizationList" [value]="organization.id">
+      {{organization.name}}
+    </mat-list-option>
+  </mat-selection-list>
+  <p *ngIf="org.selectedOptions.hasValue()">
+    Option selected: {{org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : 'None'}}
+  </p>
+
+  <mat-list *ngIf="org.selectedOptions.hasValue() && processesList">
+    <ng-container *ngFor="let proces of processesList">
+      <mat-list-item *ngIf="proces.organization === org.selectedOptions.selected[0].value">
+        {{proces.name}}
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+  
 

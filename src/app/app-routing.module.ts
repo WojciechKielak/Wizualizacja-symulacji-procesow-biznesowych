@@ -6,10 +6,14 @@ import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
   { path:'models', component: ModelsComponent},
-  { path:'models/processes', component: ProcessesComponent},
+  // { path:'models/processes', component: ProcessesComponent},
   { path:'report', component: ReportComponent},
-  { path:'processes', component: ProcessesComponent},
+  // { path:'processes', component: ProcessesComponent},
   // { path:'**',component: ProcessesComponent},
+  { path:'processes/:processesid', component: ProcessesComponent},
+  // { path: 'processes/:processesid', loadChildren: () => import('./processes/processes.module').then(m => m.ProcessesModule) 
+  // , canActivate: [LoginGuard]
+// },
 ];
 
 @NgModule({

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModuleServiceService } from './module-service.service';
 import { OrganizationList } from './organization';
+import { ProcessList } from './process';
 
 @Component({
   selector: 'app-models',
@@ -9,6 +10,7 @@ import { OrganizationList } from './organization';
 })
 export class ModelsComponent implements OnInit {
   organizationList: OrganizationList[] = [];
+  processesList: ProcessList[] = [];
 
   constructor(private apiService: ModuleServiceService) {}
 
@@ -16,8 +18,13 @@ export class ModelsComponent implements OnInit {
     this.apiService.get().subscribe((response) => {
       this.organizationList=response;
       console.log(response);
-      console.log(this.organizationList);
     });
+
+    this.apiService.getProcesses().subscribe((response) => {
+      this.processesList=response;
+      console.log(response);
+    });
+
   }
 
 }
