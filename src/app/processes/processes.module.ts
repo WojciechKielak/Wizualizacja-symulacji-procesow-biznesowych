@@ -6,6 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { RouterModule } from '@angular/router';
     BrowserAnimationsModule,
     NoopAnimationsModule,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule,
+    MatListModule,
   ]
 })
 export class ProcessesModule { }
