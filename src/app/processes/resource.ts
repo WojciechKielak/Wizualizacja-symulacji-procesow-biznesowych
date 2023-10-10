@@ -1,6 +1,5 @@
-export interface ProcessList{
+export interface ResourceList{
     id: number,
     name: string,
     organization: number,
-    generator: number,
 }

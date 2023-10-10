@@ -247,5 +247,3 @@ export const linkss: Edge[] = [
     target: 'g',
   }
 ];
-
-

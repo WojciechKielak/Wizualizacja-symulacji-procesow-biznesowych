@@ -8,6 +8,11 @@ import { ProcessesService } from './services/processes.service';
 import { OrganizationList } from '../models/organization';
 import { ProcessList } from '../models/process';
 import { ActivatedRoute } from '@angular/router';
+import { EventList } from './event';
+import { ResourceList } from './resource';
+import { GeneratorList } from './generator';
+import { PollList } from './poll';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-processes',
@@ -28,27 +33,123 @@ export class ProcessesComponent implements OnInit{
   clusters: ClusterNode[] = clusters;
   organizationList: OrganizationList[] = [];
   processesList: ProcessList[] = [];
+  eventList: EventList[] = [];
+  resourceList: ResourceList[] = [];
+  generatorList: GeneratorList[] = [];
+  pollList: PollList[]=[];
   constructor(private processesService: ProcessesService, private route: ActivatedRoute){}
+  
   ngOnInit(): void {
-    const idString = this.route.snapshot.paramMap.get('processesid');
+
+const idString = this.route.snapshot.paramMap.get('processesid');
   if (idString !== null) {
     this.id = parseInt(idString, 10);
     if (!isNaN(this.id)) {
-      this.processesService.getProcesses(this.id).subscribe((response) => {
-        this.processesList = response;
-        console.log(response);
+      const processes$ = this.processesService.getProcesses(this.id);
+      const events$ = this.processesService.getEvents();
+      const resources$ = this.processesService.getResources();
+      const generators$ = this.processesService.geGenerators();
+
+      forkJoin([processes$, events$, resources$, generators$]).subscribe(([processes,events, resources, generators]) => {
+        this.eventList = events;
+        this.resourceList = resources;
+        this.generatorList = generators;
+        this.processesList = processes;
+
+        console.log("przed");
+        console.log(this.eventList);
+        console.log(this.resourceList);
+        console.log(this.generatorList);
+        console.log(this.processesList);
+        this.processesList.forEach(element => {
+          console.log(element.generator);
+          const startEvent = this.generatorList.find(value => value.id === element.generator);
+          console.log( startEvent);
+          this.pollList.push({ id: element.id, name: element.name, startEvent: startEvent?.event, poll:{
+            nodes: [],
+            clusters: [],
+            links: []
+          } });
+        });
+        
+        // this.pollList[0]?.poll?.links.push({
+        //   source: 'a',
+        //   target: 'b',
+        // }) 
+        // this.pollList[1]?.poll?.nodes.push({
+        //   id: 'a',
+        //   label: 'Kork 1'
+        //   ,data: {shape: 'circle', d1:5 , d2:4 , d3:2}
+        // }) 
+
+        this.pollList.forEach(element => {
+          let event = this.eventList.find(value => value.id === element.startEvent);
+          while( event?.output != null ){
+            element.poll?.links.push({ source: event.id.toString() , target: event.output.toString()})
+
+
+            if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() )){
+              let resorc = this.resourceList.find(value => value.id === event?.resource);
+              element.poll!.clusters.push( {
+                id: event.resource.toString(),
+                label: resorc?.name,
+                childNodeIds: [event.id.toString()]
+              })
+            }
+            else{
+              let lane = element.poll.clusters.find(value => value.id === event?.resource.toString());
+              
+              // element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds=[...,event.id.toString()]
+              element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
+
+              // element.poll.clusters[element.poll.clusters.indexOf(lane!)].push( {
+              //   childNodeIds: [event.id.toString()]
+              // })
+
+            }
+
+
+
+            event = this.eventList.find(value => value.id === event!.output);
+            
+            if(event?.output === null){
+              if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() )){
+                let resorc = this.resourceList.find(value => value.id === event?.resource);
+                element.poll!.clusters.push( {
+                  id: event.resource.toString(),
+                  label: resorc?.name,
+                  childNodeIds: [event.id.toString()]
+                })
+              }
+              else{
+                let lane = element.poll.clusters.find(value => value.id === event?.resource.toString());
+                element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
+              }
+            }
+          }
+          
+        });
+
+        console.log("po");
+        // this.pollList.forEach(element => {
+        //   console.log("b " + element.name+" "+element.startEvent);
+          
+        // });
+        console.log(this.pollList);
+
+
+
       });
+
     } else {
       console.error('processes/processes.component processid nie jest liczba');
     }
   } else {
     console.error('processes/processes.component processid jest nullem');
   }
-    
-    // this.processesService.getProcesses(this.id).subscribe((response) => {
-    //   this.processesList=response;
-    //   console.log(response);
-    // });
+
+  console.log("koniec");
+  
   }
 
   diamondPoints(width: number, height: number): string {
