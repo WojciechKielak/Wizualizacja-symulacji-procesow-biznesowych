@@ -88,16 +88,16 @@ const idString = this.route.snapshot.paramMap.get('processesid');
             element.poll?.links.push({ source: event.id.toString() , target: event.output.toString()})
 
 
-            if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() )){
+            if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
               let resorc = this.resourceList.find(value => value.id === event?.resource);
               element.poll!.clusters.push( {
-                id: event.resource.toString(),
+                id: event.resource.toString()+'P',
                 label: resorc?.name,
                 childNodeIds: [event.id.toString()]
               })
             }
             else{
-              let lane = element.poll.clusters.find(value => value.id === event?.resource.toString());
+              let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
               
               // element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds=[...,event.id.toString()]
               element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
@@ -108,23 +108,41 @@ const idString = this.route.snapshot.paramMap.get('processesid');
 
             }
 
-
+            if( event.id === element.startEvent!){
+            element.poll!.nodes.push( {
+              id: event.id.toString(),
+              label: event.name,
+              data: {shape: 'circle'}
+            })
+            }else{
+              element.poll!.nodes.push( {
+                id: event.id.toString(),
+                label: event.name,
+                data: {shape: ''}
+                });
+            }
 
             event = this.eventList.find(value => value.id === event!.output);
-            
+
             if(event?.output === null){
-              if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() )){
+              if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
                 let resorc = this.resourceList.find(value => value.id === event?.resource);
                 element.poll!.clusters.push( {
-                  id: event.resource.toString(),
+                  id: event.resource.toString()+'P',
                   label: resorc?.name,
                   childNodeIds: [event.id.toString()]
                 })
               }
               else{
-                let lane = element.poll.clusters.find(value => value.id === event?.resource.toString());
+                let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
                 element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
               }
+
+              element.poll!.nodes.push( {
+                id: event.id.toString(),
+                label: event.name,
+                data: {shape: 'circle'}
+              });
             }
           }
           
@@ -135,7 +153,8 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         //   console.log("b " + element.name+" "+element.startEvent);
           
         // });
-        console.log(this.pollList);
+        console.log(this.pollList[0].poll?.clusters);
+        console.log(this.pollList[1].poll?.clusters);
 
 
 

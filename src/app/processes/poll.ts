@@ -3,7 +3,7 @@ export interface PollList{
     id: number,
     name: string,
     startEvent: number | undefined,
-    poll?: {
+    poll: {
         nodes: Node[],
         clusters: ClusterNode[],
         links: Edge[],
