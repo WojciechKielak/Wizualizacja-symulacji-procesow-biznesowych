@@ -14,6 +14,8 @@ const routes: Routes = [
   // { path: 'processes/:processesid', loadChildren: () => import('./processes/processes.module').then(m => m.ProcessesModule) 
   // , canActivate: [LoginGuard]
 // },
+{ path:'models', component: ModelsComponent},
+{ path:'**',redirectTo:'/models', pathMatch:'full'},
 ];
 
 @NgModule({

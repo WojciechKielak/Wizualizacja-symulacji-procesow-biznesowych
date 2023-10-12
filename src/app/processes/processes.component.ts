@@ -7,7 +7,7 @@ import customCurve from './MyCurve';
 import { ProcessesService } from './services/processes.service';
 import { OrganizationList } from '../models/organization';
 import { ProcessList } from '../models/process';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventList } from './event';
 import { ResourceList } from './resource';
 import { GeneratorList } from './generator';
@@ -37,7 +37,8 @@ export class ProcessesComponent implements OnInit{
   resourceList: ResourceList[] = [];
   generatorList: GeneratorList[] = [];
   pollList: PollList[]=[];
-  constructor(private processesService: ProcessesService, private route: ActivatedRoute){}
+  constructor(private processesService: ProcessesService, private route: ActivatedRoute,
+    private router: Router){}
   
   ngOnInit(): void {
 
@@ -61,6 +62,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         console.log(this.resourceList);
         console.log(this.generatorList);
         console.log(this.processesList);
+        if(this.processesList.length ===0) this.router.navigateByUrl('/models');
         this.processesList.forEach(element => {
           console.log(element.generator);
           const startEvent = this.generatorList.find(value => value.id === element.generator);
@@ -153,8 +155,8 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         //   console.log("b " + element.name+" "+element.startEvent);
           
         // });
-        console.log(this.pollList[0].poll?.clusters);
-        console.log(this.pollList[1].poll?.clusters);
+        // console.log(this.pollList[0].poll?.clusters);
+        // console.log(this.pollList[1].poll?.clusters);
 
 
 
