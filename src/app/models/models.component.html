@@ -11,10 +11,6 @@
       {{organization.name}}
     </mat-list-option>
   </mat-selection-list>
-  <p *ngIf="org.selectedOptions.hasValue()">
-    Option selected: {{org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : 'None'}}
-  </p>
-
   <mat-list *ngIf="org.selectedOptions.hasValue() && processesList">
     <ng-container *ngFor="let proces of processesList">
       <mat-list-item *ngIf="proces.organization === org.selectedOptions.selected[0].value">
@@ -22,5 +18,12 @@
       </mat-list-item>
     </ng-container>
   </mat-list>
+  
+  
+  <p *ngIf="org.selectedOptions.hasValue()">
+    Option selected: {{org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : 'None'}}
+  </p>
+
+
   
 

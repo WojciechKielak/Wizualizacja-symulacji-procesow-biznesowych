@@ -95,7 +95,7 @@
         />
 
         <svg:foreignObject
-        *ngIf="node.data.task==='user'"
+        *ngIf="node.data.task==='USER'"
         [attr.width]="node.dimension.width/2"
         [attr.height]="node.dimension.height/2"
         [attr.y]="'-2px'"
@@ -109,7 +109,7 @@
       </svg:foreignObject>
 
       <svg:foreignObject
-        *ngIf="node.data.task==='manual'"
+        *ngIf="node.data.task==='MANUAL'"
         [attr.width]="node.dimension.width/2"
         [attr.height]="node.dimension.height/2"
         transform="rotate(90)"

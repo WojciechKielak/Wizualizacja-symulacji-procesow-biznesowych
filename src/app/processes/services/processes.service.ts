@@ -5,6 +5,7 @@ import { ProcessList } from 'src/app/models/process';
 import { EventList } from '../event';
 import { ResourceList } from '../resource';
 import { GeneratorList } from '../generator';
+import { GateList } from '../gate';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,10 @@ export class ProcessesService {
   getResources(): Observable<any> {
     return this.http.get<ResourceList[]>('http://localhost:8000/resources/');
   }
-  geGenerators(): Observable<any> {
+  getGenerators(): Observable<any> {
     return this.http.get<GeneratorList[]>('http://localhost:8000/generators/');
+  }
+  getGatewaysXor(): Observable<any> {
+    return this.http.get<GateList[]>('http://localhost:8000/gateways/xor/');
   }
 }
