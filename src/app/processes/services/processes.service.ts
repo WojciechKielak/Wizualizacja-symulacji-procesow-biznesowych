@@ -34,4 +34,7 @@ export class ProcessesService {
   getGatewaysXor(): Observable<any> {
     return this.http.get<GateList[]>('http://localhost:8000/gateways/xor/');
   }
+  getGatewaysOr(): Observable<any> {
+    return this.http.get<GateList[]>('http://localhost:8000/gateways/parallels/');
+  }
 }

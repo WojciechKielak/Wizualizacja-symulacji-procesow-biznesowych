@@ -39,11 +39,13 @@ export class ProcessesComponent implements OnInit{
   generatorList: GeneratorList[] = [];
   pollList: PollList[]=[];
   xorList: GateList[]=[];
+  orList: GateList[]=[];
   constructor(private processesService: ProcessesService, private route: ActivatedRoute,
     private router: Router){}
   
   step(element: PollList,event: EventList| undefined): void {
     while( event?.output != null ){
+      console.log("ID: "+ event?.id)
       console.log(element.poll.nodes.find(value => value.id === event?.id.toString()));
       if(element.poll.nodes.find(value => value.id === event?.id.toString()) !== undefined)break;  
 
@@ -100,14 +102,19 @@ export class ProcessesComponent implements OnInit{
           });
         }
       }else{
+        let gateName='xor';
         let gate = this.xorList.find(value => value.id === nextId);
+        if(gate === undefined){
+          gate = this.orList.find(value => value.id === nextId);
+          gateName='or';
+        }
         
         if(gate !== undefined){
           if(element.poll.nodes.find(value => value.id === nextId.toString()) !== undefined)break;
           element.poll!.nodes.push( {
             id: gate.id.toString(),
             label: "X",
-            data: {shape: 'diamond', gate:'xor'}
+            data: {shape: 'diamond', gate:gateName}
           });
 
 
@@ -127,7 +134,7 @@ export class ProcessesComponent implements OnInit{
         console.log(Object.keys(gate!.parameters));
         Object.keys(gate!.parameters).forEach(el => {console.log(el)
           event = this.eventList.find(value => value.id.toString() === el);
-          element.poll?.links.push({ source: gate!.id.toString() , target: el})
+          element.poll?.links.push({ source: gate!.id.toString() , target: el});
           this.step(element, event);
         });
         // gate?.parameters.forEach(element => {console.log(element)});
@@ -145,13 +152,15 @@ const idString = this.route.snapshot.paramMap.get('processesid');
       const resources$ = this.processesService.getResources();
       const generators$ = this.processesService.getGenerators();
       const xors$ = this.processesService.getGatewaysXor();
+      const ors$ = this.processesService.getGatewaysOr();
 
-      forkJoin([processes$, events$, resources$, generators$,xors$]).subscribe(([processes,events, resources, generators,xors]) => {
+      forkJoin([processes$, events$, resources$, generators$,xors$,ors$]).subscribe(([processes,events, resources, generators,xors,ors]) => {
         this.eventList = events;
         this.resourceList = resources;
         this.generatorList = generators;
         this.processesList = processes;
         this.xorList = xors;
+        this.orList = ors;
 
         console.log("przed");
         console.log(this.eventList);
@@ -159,6 +168,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         console.log(this.generatorList);
         console.log(this.processesList);
         console.log(this.xorList);
+        console.log(this.orList);
         if(this.processesList.length ===0) this.router.navigateByUrl('/models');
         this.processesList.forEach(element => {
           console.log(element.generator);
