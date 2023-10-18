@@ -140,6 +140,29 @@ export class ProcessesComponent implements OnInit{
         // gate?.parameters.forEach(element => {console.log(element)});
       }
     }
+    if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
+      if(event?.output === null){
+        if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
+          let resorc = this.resourceList.find(value => value.id === event?.resource);
+          element.poll!.clusters.push( {
+            id: event.resource.toString()+'P',
+            label: resorc?.name,
+            childNodeIds: [event.id.toString()]
+          })
+        }
+        else{
+          let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+          element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
+        }
+  
+        element.poll!.nodes.push( {
+          id: event.id.toString(),
+          label: event.name,
+          data: {shape: 'circle'}
+        });
+      }
+    }
+    
   }
   ngOnInit(): void {
 
