@@ -37,4 +37,7 @@ export class ProcessesService {
   getGatewaysOr(): Observable<any> {
     return this.http.get<GateList[]>('http://localhost:8000/gateways/parallels/');
   }
+  getRun(id:number): Observable<any> {
+    return this.http.get<string>('http://localhost:8000/processes/simulations/run/${id}');
+  }
 }

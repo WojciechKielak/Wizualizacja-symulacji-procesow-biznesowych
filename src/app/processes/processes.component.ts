@@ -14,6 +14,7 @@ import { GeneratorList } from './generator';
 import { PollList } from './poll';
 import { forkJoin } from 'rxjs';
 import { GateList } from './gate';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-processes',
@@ -74,7 +75,8 @@ export class ProcessesComponent implements OnInit{
         element.poll!.nodes.push( {
           id: event.id.toString(),
           label: event.name,
-          data: {shape: '',task:event.type}
+          data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
+          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
           });
       }
       let nextId = event.output;
@@ -204,91 +206,16 @@ const idString = this.route.snapshot.paramMap.get('processesid');
           } });
         });
         
-        // this.pollList[0]?.poll?.links.push({
-        //   source: 'a',
-        //   target: 'b',
-        // }) 
-        // this.pollList[1]?.poll?.nodes.push({
-        //   id: 'a',
-        //   label: 'Kork 1'
-        //   ,data: {shape: 'circle', d1:5 , d2:4 , d3:2}
-        // }) 
-
         this.pollList.forEach(element => {
           let event = this.eventList.find(value => value.id === element.startEvent);
           this.step(element, event);
-          // while( event?.output != null ){
-          //   element.poll?.links.push({ source: event.id.toString() , target: event.output.toString()})
-
-
-          //   if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
-          //     let resorc = this.resourceList.find(value => value.id === event?.resource);
-          //     element.poll!.clusters.push( {
-          //       id: event.resource.toString()+'P',
-          //       label: resorc?.name,
-          //       childNodeIds: [event.id.toString()]
-          //     })
-          //   }
-          //   else{
-          //     let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-              
-          //     // element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds=[...,event.id.toString()]
-          //     element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
-
-          //     // element.poll.clusters[element.poll.clusters.indexOf(lane!)].push( {
-          //     //   childNodeIds: [event.id.toString()]
-          //     // })
-
-          //   }
-
-          //   if( event.id === element.startEvent!){
-          //   element.poll!.nodes.push( {
-          //     id: event.id.toString(),
-          //     label: event.name,
-          //     data: {shape: 'circle'}
-          //   })
-          //   }else{
-          //     element.poll!.nodes.push( {
-          //       id: event.id.toString(),
-          //       label: event.name,
-          //       data: {shape: '',task:event.type}
-          //       });
-          //   }
-
-          //   event = this.eventList.find(value => value.id === event!.output);
-
-          //   if(event?.output === null){
-          //     if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
-          //       let resorc = this.resourceList.find(value => value.id === event?.resource);
-          //       element.poll!.clusters.push( {
-          //         id: event.resource.toString()+'P',
-          //         label: resorc?.name,
-          //         childNodeIds: [event.id.toString()]
-          //       })
-          //     }
-          //     else{
-          //       let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-          //       element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
-          //     }
-
-          //     element.poll!.nodes.push( {
-          //       id: event.id.toString(),
-          //       label: event.name,
-          //       data: {shape: 'circle'}
-          //     });
-          //   }
-          // }
+         
           
         });
 
         console.log("po");
         console.log(this.pollList);
-        // this.pollList.forEach(element => {
-        //   console.log("b " + element.name+" "+element.startEvent);
-          
-        // });
-        // console.log(this.pollList[0].poll?.clusters);
-        // console.log(this.pollList[1].poll?.clusters);
+        
 
 
 
@@ -318,5 +245,17 @@ const idString = this.route.snapshot.paramMap.get('processesid');
     this.clusters = clusterss;
     console.log(this.nodes);
   }
-  // const roomId = this.route.snapshot.paramMap.get('roomid');
+
+  onStart(){
+    console.log("Start");
+    this.processesService.getRun(1);
+    interval(1000).subscribe(() => {
+      this.processesService.getEvents().subscribe(data => {
+          this.eventList = data;
+          console.log(data);
+          console.log("HH");
+      });
+  });
+  }
+
 }

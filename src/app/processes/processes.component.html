@@ -1,4 +1,4 @@
-<button (click)="change()" type="submit">Start</button>
+<button (click)="onStart()" type="submit">Start</button>
 <div>
     <button>Stop</button>
 </div>
@@ -177,14 +177,14 @@
           
       {{node.label}}
       </svg:text>
-      <svg:text *ngSwitchCase="''" alignment-baseline="central" [attr.x]="-2-8*node.data.d1?.toString().length" [attr.y]="8">
-        {{node.data.d1}}
+      <svg:text *ngSwitchCase="''" alignment-baseline="central" [attr.x]="-2-8*node.data.monitor_pending?.toString().length" [attr.y]="8">
+        {{node.data.monitor_pending}}
       </svg:text>
       <svg:text *ngSwitchCase="''" alignment-baseline="central" [attr.x]="node.dimension.width+2" [attr.y]="8">
-        {{node.data.d2}}
+        {{node.data.monitor_execute}}
       </svg:text>
-      <svg:text *ngSwitchCase="''" alignment-baseline="central" [attr.x]="-1-8*node.data.d3?.toString().length" [attr.y]="node.dimension.height-8">
-        {{node.data.d3}}
+      <svg:text *ngSwitchCase="''" alignment-baseline="central" [attr.x]="-1-8*node.data.monitor_realized?.toString().length" [attr.y]="node.dimension.height-8">
+        {{node.data.monitor_realized}}
       </svg:text>
 
       </ng-container>
