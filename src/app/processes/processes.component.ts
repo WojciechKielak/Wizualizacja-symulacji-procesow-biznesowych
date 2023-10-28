@@ -15,6 +15,8 @@ import { PollList } from './poll';
 import { forkJoin } from 'rxjs';
 import { GateList } from './gate';
 import { interval } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { Numeric } from 'd3';
 
 @Component({
   selector: 'app-processes',
@@ -41,6 +43,8 @@ export class ProcessesComponent implements OnInit{
   pollList: PollList[]=[];
   xorList: GateList[]=[];
   orList: GateList[]=[];
+  isRunning: boolean = false;
+  idSimulations: number[]=[];
   constructor(private processesService: ProcessesService, private route: ActivatedRoute,
     private router: Router){}
   
@@ -196,6 +200,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         console.log(this.orList);
         if(this.processesList.length ===0) this.router.navigateByUrl('/models');
         this.processesList.forEach(element => {
+
           console.log(element.generator);
           const startEvent = this.generatorList.find(value => value.id === element.generator);
           console.log( startEvent);
@@ -240,22 +245,96 @@ const idString = this.route.snapshot.paramMap.get('processesid');
   }
 
   change(){
-    this.nodes=nodess;
-    this.links=linkss;
-    this.clusters = clusterss;
-    console.log(this.nodes);
+    // this.nodes=nodess;
+    // this.links=linkss;
+    // this.clusters = clusterss;
+    // console.log(this.nodes);
+    this.isRunning = false;
   }
 
+  sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// onStart() {
+//   console.log("Start");
+//   this.isRunning = true;
+//   this.processesService.getRun(1);
+  
+//   const symulation = async () => {
+//     while (this.isRunning) {
+//       try {
+//         const data = await this.processesService.getEvents().toPromise(); // Poczekaj na dane
+        
+//         this.eventList = data;
+//         console.log(data);
+//         console.log("HH");
+
+//         this.pollList.forEach(element => {
+//           element.poll.nodes.forEach(eve => {
+//             if (eve.data.shape === "") {
+//               console.log(eve);
+//               console.log("ALA");
+//               let event = this.eventList.find(value => value.id.toString() === eve.id);
+//               if (event !== null) {
+//                 console.log("BASIA");
+//                 element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_pending = event!.monitor_pending;
+//               }
+//             }
+//           });
+//         });
+
+//         console.log("A");
+//         console.log(this.pollList);
+//       } catch (error) {
+//         console.error(error);
+//       }
+//       await this.sleep(1000); // Poczekaj 1 sekundę
+//     }
+//     console.log("koniec");
+//   }
+
+//   symulation();
+// }
   onStart(){
     console.log("Start");
-    this.processesService.getRun(1);
-    interval(1000).subscribe(() => {
-      this.processesService.getEvents().subscribe(data => {
+    this.isRunning = true;
+    this.processesService.getRun(1).subscribe(data => {
+      console.log(data);
+    });
+    const symulation = async () => {
+        while (this.isRunning) {
+          const data = await this.processesService.getEvents().toPromise(); // Poczekaj na dane
           this.eventList = data;
           console.log(data);
           console.log("HH");
-      });
-  });
+          this.pollList.forEach(element => {
+            element.poll.nodes.forEach( eve => {
+              if( eve.data.shape === ""){
+                let event = this.eventList.find(value => value.id.toString() === eve.id);
+                if( event !== null ){
+                  console.log("nre " +  event!.monitor_realized);
+                  console.log(this.eventList);
+                  // element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_pending= event!.monitor_pending;
+                  // element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_execute= event!.monitor_execute;
+                  // element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_realized= event!.monitor_realized;
+                  eve.data.monitor_pending= event!.monitor_pending;
+                  eve.data.monitor_execute= event!.monitor_execute;
+                  eve.data.monitor_realized= event!.monitor_realized;
+                }
+              }
+            })
+
+          });
+          console.log("A");
+          console.log(this.pollList);
+          
+          await this.sleep(1000);
+        }
+        console.log("koniec");
+      }
+    symulation();
+
   }
 
 }
