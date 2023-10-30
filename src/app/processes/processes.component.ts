@@ -200,7 +200,11 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         console.log(this.orList);
         if(this.processesList.length ===0) this.router.navigateByUrl('/models');
         this.processesList.forEach(element => {
-
+          if (element.simulation !== undefined) {
+            if (!this.idSimulations.includes(element.simulation)) {
+              this.idSimulations.push(element.simulation);
+            }
+          }
           console.log(element.generator);
           const startEvent = this.generatorList.find(value => value.id === element.generator);
           console.log( startEvent);
@@ -244,7 +248,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
     return `0,${halfHeight} ${halfWidth},0 ${width},${halfHeight} ${halfWidth},${height} 0,${halfHeight}`;
   }
 
-  change(){
+  onStop(){
     // this.nodes=nodess;
     // this.links=linkss;
     // this.clusters = clusterss;
@@ -299,9 +303,14 @@ const idString = this.route.snapshot.paramMap.get('processesid');
   onStart(){
     console.log("Start");
     this.isRunning = true;
-    this.processesService.getRun(1).subscribe(data => {
-      console.log(data);
-    });
+    for(let i = 0; i < this.idSimulations.length; i++) {
+      this.processesService.getRun(this.idSimulations[i]).subscribe(data => {
+        console.log(data);
+      });
+    }
+    // this.processesService.getRun(1).subscribe(data => {
+    //   console.log(data);
+    // });
     const symulation = async () => {
         while (this.isRunning) {
           const data = await this.processesService.getEvents().toPromise(); // Poczekaj na dane
