@@ -1,8 +1,8 @@
 export interface GateList{
     id: number;
     name: string;
-    parameters: {
-        [key: string]: number; 
+    percentages: {
+        [key: number]: number; 
     };
     resource: number;
 }

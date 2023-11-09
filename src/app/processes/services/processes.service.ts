@@ -6,6 +6,7 @@ import { EventList } from '../event';
 import { ResourceList } from '../resource';
 import { GeneratorList } from '../generator';
 import { GateList } from '../gate';
+import { GateAndList } from '../gateAnd';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,10 @@ export class ProcessesService {
     return this.http.get<GateList[]>('http://localhost:8000/gateways/xor/');
   }
   getGatewaysOr(): Observable<any> {
-    return this.http.get<GateList[]>('http://localhost:8000/gateways/parallels/');
+    return this.http.get<GateList[]>('http://localhost:8000/gateways/or/');
+  }
+  getGatewaysAnd(): Observable<any> {
+    return this.http.get<GateAndList[]>('http://localhost:8000/gateways/parallel/');
   }
   getRun(id: number): Observable<any> {
     return this.http.get<string>(`http://localhost:8000/processes/simulations/run/${id}`);

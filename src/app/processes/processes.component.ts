@@ -17,6 +17,7 @@ import { GateList } from './gate';
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { Numeric } from 'd3';
+import { GateAndList } from './gateAnd';
 
 @Component({
   selector: 'app-processes',
@@ -43,6 +44,7 @@ export class ProcessesComponent implements OnInit{
   pollList: PollList[]=[];
   xorList: GateList[]=[];
   orList: GateList[]=[];
+  andList: GateAndList[]=[];
   isRunning: boolean = false;
   idSimulations: number[]=[];
   constructor(private processesService: ProcessesService, private route: ActivatedRoute,
@@ -109,6 +111,8 @@ export class ProcessesComponent implements OnInit{
         }
       }else{
         let gateName='xor';
+        console.log("TUTEJ");
+        console.log(nextId);
         let gate = this.xorList.find(value => value.id === nextId);
         if(gate === undefined){
           gate = this.orList.find(value => value.id === nextId);
@@ -137,8 +141,13 @@ export class ProcessesComponent implements OnInit{
             element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gate.id.toString());
           }
         }
-        console.log(Object.keys(gate!.parameters));
-        Object.keys(gate!.parameters).forEach(el => {console.log(el)
+        console.log("BUUUM");
+        console.log(this.xorList);
+        console.log(gateName);
+        console.log(gate);
+        console.log(Object.keys(gate!.percentages));
+        Object.keys(gate!.percentages).forEach(el => {console.log(el);
+          console.log("BUUUM");
           event = this.eventList.find(value => value.id.toString() === el);
           element.poll?.links.push({ source: gate!.id.toString() , target: el});
           this.step(element, event);
