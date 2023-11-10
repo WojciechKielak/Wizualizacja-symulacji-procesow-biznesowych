@@ -55,7 +55,7 @@ export class ProcessesComponent implements OnInit{
       console.log("ID: "+ event?.id)
       console.log(element.poll.nodes.find(value => value.id === event?.id.toString()));
       if(element.poll.nodes.find(value => value.id === event?.id.toString()) !== undefined)break;  
-
+      //if( event.id === element.startEvent!) element.poll?.links.push({ source:'0' , target: event.id.toString()});
       element.poll?.links.push({ source: event.id.toString() , target: event.output.toString()})
 
       if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
@@ -73,9 +73,18 @@ export class ProcessesComponent implements OnInit{
 
       if( event.id === element.startEvent!){
       element.poll!.nodes.push( {
+        id: 's',
+        label: 'start',
+        data: {shape: 'circle'}
+      });
+      let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+      element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('s');
+      element.poll?.links.push({ source:'s' , target: event.id.toString()});
+      element.poll!.nodes.push( {
         id: event.id.toString(),
         label: event.name,
-        data: {shape: 'circle'}
+        data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
+          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
       })
       }else{
         element.poll!.nodes.push( {
