@@ -141,6 +141,43 @@ export class ProcessesComponent implements OnInit{
             element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gate.id.toString());
           }
         }
+        console.log(gate === undefined);
+        if(gate === undefined){
+          let gateAnd = this.andList.find(value => value.id === nextId);
+          gateName='and';
+          console.log(gateAnd === undefined);
+          console.log("ulala");
+
+          if(element.poll.nodes.find(value => value.id === nextId.toString()) !== undefined)break;
+          element.poll!.nodes.push( {
+            id: gateAnd!.id.toString(),
+            label: "+",
+            data: {shape: 'diamond', gate:gateName}
+          });
+
+          if( !element.poll?.clusters.find(value => value.id === gateAnd?.resource.toString() +'P')){
+            let resorc = this.resourceList.find(value => value.id === gateAnd?.resource);
+            element.poll!.clusters.push( {
+              id: gateAnd!.resource.toString()+'P',
+              label: resorc?.name,
+              childNodeIds: [gateAnd!.id.toString()]
+            })
+            console.log("ulala 2");
+            gateAnd!.id_list.forEach(el => {console.log(el);
+              console.log("BUUUM");
+              event = this.eventList.find(value => value.id === el);
+              console.log(gateAnd!.id.toString());
+              element.poll?.links.push({ source: gateAnd!.id.toString() , target: el.toString()});
+              this.step(element, event);
+            });
+          }
+          else{
+            let lane = element.poll.clusters.find(value => value.id === gateAnd?.resource.toString()+'P');
+            element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gateAnd!.id.toString());
+            console.log("ulala 3");
+          }
+
+        }else{
         console.log("BUUUM");
         console.log(this.xorList);
         console.log(gateName);
@@ -153,6 +190,9 @@ export class ProcessesComponent implements OnInit{
           this.step(element, event);
         });
         // gate?.parameters.forEach(element => {console.log(element)});
+        }
+
+        
       }
     }
     if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
@@ -191,14 +231,16 @@ const idString = this.route.snapshot.paramMap.get('processesid');
       const generators$ = this.processesService.getGenerators();
       const xors$ = this.processesService.getGatewaysXor();
       const ors$ = this.processesService.getGatewaysOr();
+      const ands$ = this.processesService.getGatewaysAnd();
 
-      forkJoin([processes$, events$, resources$, generators$,xors$,ors$]).subscribe(([processes,events, resources, generators,xors,ors]) => {
+      forkJoin([processes$, events$, resources$, generators$,xors$,ors$,ands$]).subscribe(([processes,events, resources, generators,xors,ors,ands]) => {
         this.eventList = events;
         this.resourceList = resources;
         this.generatorList = generators;
         this.processesList = processes;
         this.xorList = xors;
         this.orList = ors;
+        this.andList = ands;
 
         console.log("przed");
         console.log(this.eventList);
@@ -207,6 +249,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         console.log(this.processesList);
         console.log(this.xorList);
         console.log(this.orList);
+        console.log(this.andList);
         if(this.processesList.length ===0) this.router.navigateByUrl('/models');
         this.processesList.forEach(element => {
           if (element.simulation !== undefined) {

@@ -39,7 +39,7 @@ export class ProcessesService {
     return this.http.get<GateList[]>('http://localhost:8000/gateways/or/');
   }
   getGatewaysAnd(): Observable<any> {
-    return this.http.get<GateAndList[]>('http://localhost:8000/gateways/parallel/');
+    return this.http.get<GateAndList[]>('http://localhost:8000/gateways/parallels/');
   }
   getRun(id: number): Observable<any> {
     return this.http.get<string>(`http://localhost:8000/processes/simulations/run/${id}`);
