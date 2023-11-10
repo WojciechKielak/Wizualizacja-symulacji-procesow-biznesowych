@@ -98,26 +98,26 @@ export class ProcessesComponent implements OnInit{
       event = this.eventList.find(value => value.id === event!.output);
       console.log(event !== undefined);
       if(event !== undefined){
-        if(event?.output === null){
-          if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
-            let resorc = this.resourceList.find(value => value.id === event?.resource);
-            element.poll!.clusters.push( {
-              id: event.resource.toString()+'P',
-              label: resorc?.name,
-              childNodeIds: [event.id.toString()]
-            })
-          }
-          else{
-            let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-            element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
-          }
+        // if(event?.output === null){
+        //   if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
+        //     let resorc = this.resourceList.find(value => value.id === event?.resource);
+        //     element.poll!.clusters.push( {
+        //       id: event.resource.toString()+'P',
+        //       label: resorc?.name,
+        //       childNodeIds: [event.id.toString()]
+        //     })
+        //   }
+        //   else{
+        //     let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+        //     element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
+        //   }
 
-          element.poll!.nodes.push( {
-            id: event.id.toString(),
-            label: event.name,
-            data: {shape: 'circle'}
-          });
-        }
+        //   element.poll!.nodes.push( {
+        //     id: event.id.toString(),
+        //     label: event.name,
+        //     data: {shape: 'circle'}
+        //   });
+        // }
       }else{
         let gateName='xor';
         console.log("TUTEJ");
@@ -222,8 +222,18 @@ export class ProcessesComponent implements OnInit{
         element.poll!.nodes.push( {
           id: event.id.toString(),
           label: event.name,
+          data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
+          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+        });
+
+        element.poll!.nodes.push( {
+          id: 'k',
+          label: 'koniec',
           data: {shape: 'circle'}
         });
+        let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+      element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k');
+      element.poll?.links.push({ source:event.id.toString() , target: 'k'});
       }
     }
     
