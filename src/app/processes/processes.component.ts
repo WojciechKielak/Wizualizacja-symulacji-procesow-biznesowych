@@ -98,26 +98,40 @@ export class ProcessesComponent implements OnInit{
       event = this.eventList.find(value => value.id === event!.output);
       console.log(event !== undefined);
       if(event !== undefined){
-        // if(event?.output === null){
-        //   if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
-        //     let resorc = this.resourceList.find(value => value.id === event?.resource);
-        //     element.poll!.clusters.push( {
-        //       id: event.resource.toString()+'P',
-        //       label: resorc?.name,
-        //       childNodeIds: [event.id.toString()]
-        //     })
-        //   }
-        //   else{
-        //     let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-        //     element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
-        //   }
-
-        //   element.poll!.nodes.push( {
-        //     id: event.id.toString(),
-        //     label: event.name,
-        //     data: {shape: 'circle'}
-        //   });
-        // }
+        if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
+          console.log("UND KON");
+          console.log(event);
+          if(event?.output === null){
+            if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
+              let resorc = this.resourceList.find(value => value.id === event?.resource);
+              element.poll!.clusters.push( {
+                id: event.resource.toString()+'P',
+                label: resorc?.name,
+                childNodeIds: [event.id.toString()]
+              })
+            }
+            else{
+              let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+              element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
+            }
+      
+            element.poll!.nodes.push( {
+              id: event.id.toString(),
+              label: event.name,
+              data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
+              monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+            });
+    
+            element.poll!.nodes.push( {
+              id: 'k'+event.id.toString(),
+              label: 'koniec',
+              data: {shape: 'circle'}
+            });
+            let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+            element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k'+event.id.toString());
+            element.poll?.links.push({ source:event.id.toString() , target: 'k'+event.id.toString()});
+          }
+        }
       }else{
         let nextGate = true;
         while (nextGate)
@@ -176,22 +190,36 @@ export class ProcessesComponent implements OnInit{
                     childNodeIds: [gateAnd!.id.toString()]
                   })
                   console.log("ulala 2");
-                  gateAnd!.id_list.forEach(el => {console.log(el);
-                    console.log("BUUUM");
-                    event = this.eventList.find(value => value.id === el);
-                    console.log(gateAnd!.id.toString());
-                    element.poll?.links.push({ source: gateAnd!.id.toString() , target: el.toString()});
-                    console.log("ALA");
-                    console.log(event);
-                    if(event!== undefined){
-                      this.step(element, event);
-                      nextGate = false;
-                    }
-                    else{
-                      nextId = Number(el);
-                      nextGate = true;
-                    }
-                  });
+                  if (gateAnd && gateAnd.id_list && gateAnd.id_list.length > 0)
+                  {
+                    gateAnd!.id_list.forEach(el => {console.log(el);
+                      console.log("BUUUM");
+                      event = this.eventList.find(value => value.id === el);
+                      console.log(gateAnd!.id.toString());
+                      element.poll?.links.push({ source: gateAnd!.id.toString() , target: el.toString()});
+                      console.log("ALA");
+                      console.log(event);
+                      if(event!== undefined){
+                        this.step(element, event);
+                        nextGate = false;
+                      }
+                      else{
+                        nextId = Number(el);
+                        nextGate = true;
+                      }
+                    });
+                  }
+                  else{
+                    let lane = element.poll.clusters.find(value => value.id === gateAnd?.resource.toString()+'P');
+                    element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k'+gateAnd!.id.toString());
+                    element.poll!.nodes.push( {
+                      id: 'k'+gateAnd.id.toString(),
+                      label: 'koniec',
+                      data: {shape: 'circle'}
+                    });
+                    element.poll?.links.push({ source:gateAnd.id.toString() , target: 'k'+gateAnd.id.toString()});
+                  }
+                  
                 }
                 else{
                   let lane = element.poll.clusters.find(value => value.id === gateAnd?.resource.toString()+'P');
@@ -206,61 +234,74 @@ export class ProcessesComponent implements OnInit{
             console.log(gateName);
             console.log(gate);
             console.log(Object.keys(gate!.percentages));
-            Object.keys(gate!.percentages).forEach(el => {console.log(el);
-              console.log("BUUUM");
-              event = this.eventList.find(value => value.id.toString() === el);
-              element.poll?.links.push({ source: gate!.id.toString() , target: el});
-              console.log("ALA 2");
-              console.log(event!== undefined);
-              if(event!== undefined){
-                this.step(element, event);
-                nextGate = false;
-              }
-              else{
-                console.log("Next: "+ el);
-                nextId = Number(el);
-                nextGate = true;
-              }
-            });
+            if (gate && gate.percentages && Object.keys(gate.percentages).length > 0){
+              Object.keys(gate!.percentages).forEach(el => {console.log(el);
+                console.log("BUUUM");
+                event = this.eventList.find(value => value.id.toString() === el);
+                element.poll?.links.push({ source: gate!.id.toString() , target: el});
+                console.log("ALA 2");
+                console.log(event!== undefined);
+                if(event!== undefined){
+                  this.step(element, event);
+                  nextGate = false;
+                }
+                else{
+                  console.log("Next: "+ el);
+                  nextId = Number(el);
+                  nextGate = true;
+                }
+              });
+            }else{
+              let lane = element.poll.clusters.find(value => value.id === gate?.resource.toString()+'P');
+              element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k'+gate!.id.toString());
+              element.poll!.nodes.push( {
+                id: 'k'+gate.id.toString(),
+                label: 'koniec',
+                data: {shape: 'circle'}
+              });
+              element.poll?.links.push({ source:gate.id.toString() , target: 'k'+gate.id.toString()});
+            }
+            
             // gate?.parameters.forEach(element => {console.log(element)});
             }  
           }
         
       }
     }
-    if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
-      console.log("UND KON");
-      if(event?.output === null){
-        if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
-          let resorc = this.resourceList.find(value => value.id === event?.resource);
-          element.poll!.clusters.push( {
-            id: event.resource.toString()+'P',
-            label: resorc?.name,
-            childNodeIds: [event.id.toString()]
-          })
-        }
-        else{
-          let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-          element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
-        }
+    // if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
+    //   console.log("UND KON");
+    //   console.log(event);
+    //   if(event?.output === null){
+    //     if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
+    //       let resorc = this.resourceList.find(value => value.id === event?.resource);
+    //       element.poll!.clusters.push( {
+    //         id: event.resource.toString()+'P',
+    //         label: resorc?.name,
+    //         childNodeIds: [event.id.toString()]
+    //       })
+    //     }
+    //     else{
+    //       let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+    //       element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
+    //     }
   
-        element.poll!.nodes.push( {
-          id: event.id.toString(),
-          label: event.name,
-          data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
-          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
-        });
+    //     element.poll!.nodes.push( {
+    //       id: event.id.toString(),
+    //       label: event.name,
+    //       data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
+    //       monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+    //     });
 
-        element.poll!.nodes.push( {
-          id: 'k',
-          label: 'koniec',
-          data: {shape: 'circle'}
-        });
-        let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-      element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k');
-      element.poll?.links.push({ source:event.id.toString() , target: 'k'});
-      }
-    }
+    //     element.poll!.nodes.push( {
+    //       id: 'k',
+    //       label: 'koniec',
+    //       data: {shape: 'circle'}
+    //     });
+    //     let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+    //   element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k');
+    //   element.poll?.links.push({ source:event.id.toString() , target: 'k'});
+    //   }
+    // }
     
   }
   ngOnInit(): void {
