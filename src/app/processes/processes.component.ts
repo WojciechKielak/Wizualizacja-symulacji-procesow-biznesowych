@@ -119,92 +119,117 @@ export class ProcessesComponent implements OnInit{
         //   });
         // }
       }else{
-        let gateName='xor';
-        console.log("TUTEJ");
-        console.log(nextId);
-        let gate = this.xorList.find(value => value.id === nextId);
-        if(gate === undefined){
-          gate = this.orList.find(value => value.id === nextId);
-          gateName='or';
-        }
-        
-        if(gate !== undefined){
-          if(element.poll.nodes.find(value => value.id === nextId.toString()) !== undefined)break;
-          element.poll!.nodes.push( {
-            id: gate.id.toString(),
-            label: "X",
-            data: {shape: 'diamond', gate:gateName}
-          });
-
-
-          if( !element.poll?.clusters.find(value => value.id === gate?.resource.toString() +'P')){
-            let resorc = this.resourceList.find(value => value.id === gate?.resource);
-            element.poll!.clusters.push( {
-              id: gate.resource.toString()+'P',
-              label: resorc?.name,
-              childNodeIds: [gate.id.toString()]
-            })
-          }
-          else{
-            let lane = element.poll.clusters.find(value => value.id === gate?.resource.toString()+'P');
-            element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gate.id.toString());
-          }
-        }
-        console.log(gate === undefined);
-        if(gate === undefined){
-          let gateAnd = this.andList.find(value => value.id === nextId);
-          gateName='and';
-          console.log(gateAnd === undefined);
-          console.log("ulala");
-
-          if(element.poll.nodes.find(value => value.id === nextId.toString()) !== undefined)break;
-          element.poll!.nodes.push( {
-            id: gateAnd!.id.toString(),
-            label: "+",
-            data: {shape: 'diamond', gate:gateName}
-          });
-
-          if( !element.poll?.clusters.find(value => value.id === gateAnd?.resource.toString() +'P')){
-            let resorc = this.resourceList.find(value => value.id === gateAnd?.resource);
-            element.poll!.clusters.push( {
-              id: gateAnd!.resource.toString()+'P',
-              label: resorc?.name,
-              childNodeIds: [gateAnd!.id.toString()]
-            })
-            console.log("ulala 2");
-            gateAnd!.id_list.forEach(el => {console.log(el);
+        let nextGate = true;
+        while (nextGate)
+          {
+            let gateName='xor';
+            console.log("TUTEJ");
+            console.log(nextId);
+            let gate = this.xorList.find(value => value.id === nextId);
+            if(gate === undefined){
+              gate = this.orList.find(value => value.id === nextId);
+              gateName='or';
+            }
+            
+            if(gate !== undefined){
+              if(element.poll.nodes.find(value => value.id === nextId.toString()) !== undefined)break;
+              element.poll!.nodes.push( {
+                id: gate.id.toString(),
+                label: "X",
+                data: {shape: 'diamond', gate:gateName}
+              });
+    
+    
+              if( !element.poll?.clusters.find(value => value.id === gate?.resource.toString() +'P')){
+                let resorc = this.resourceList.find(value => value.id === gate?.resource);
+                element.poll!.clusters.push( {
+                  id: gate.resource.toString()+'P',
+                  label: resorc?.name,
+                  childNodeIds: [gate.id.toString()]
+                })
+              }
+              else{
+                let lane = element.poll.clusters.find(value => value.id === gate?.resource.toString()+'P');
+                element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gate.id.toString());
+              }
+            }
+            console.log(gate === undefined);
+            if(gate === undefined){
+              let gateAnd = this.andList.find(value => value.id === nextId);
+              gateName='and';
+              console.log(gateAnd === undefined);
+              console.log("ulala");
+    
+              if( gateAnd !== undefined){
+                if(element.poll.nodes.find(value => value.id === nextId.toString()) !== undefined)break;
+              element.poll!.nodes.push( {
+                id: gateAnd!.id.toString(),
+                label: "+",
+                data: {shape: 'diamond', gate:gateName}
+              });
+    
+              if( !element.poll?.clusters.find(value => value.id === gateAnd?.resource.toString() +'P')){
+                  let resorc = this.resourceList.find(value => value.id === gateAnd?.resource);
+                  element.poll!.clusters.push( {
+                    id: gateAnd!.resource.toString()+'P',
+                    label: resorc?.name,
+                    childNodeIds: [gateAnd!.id.toString()]
+                  })
+                  console.log("ulala 2");
+                  gateAnd!.id_list.forEach(el => {console.log(el);
+                    console.log("BUUUM");
+                    event = this.eventList.find(value => value.id === el);
+                    console.log(gateAnd!.id.toString());
+                    element.poll?.links.push({ source: gateAnd!.id.toString() , target: el.toString()});
+                    console.log("ALA");
+                    console.log(event);
+                    if(event!== undefined){
+                      this.step(element, event);
+                      nextGate = false;
+                    }
+                    else{
+                      nextId = Number(el);
+                      nextGate = true;
+                    }
+                  });
+                }
+                else{
+                  let lane = element.poll.clusters.find(value => value.id === gateAnd?.resource.toString()+'P');
+                  element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gateAnd!.id.toString());
+                  console.log("ulala 3");
+                }
+              }
+    
+            }else{
+            console.log("BUUUM");
+            console.log(this.xorList);
+            console.log(gateName);
+            console.log(gate);
+            console.log(Object.keys(gate!.percentages));
+            Object.keys(gate!.percentages).forEach(el => {console.log(el);
               console.log("BUUUM");
-              event = this.eventList.find(value => value.id === el);
-              console.log(gateAnd!.id.toString());
-              element.poll?.links.push({ source: gateAnd!.id.toString() , target: el.toString()});
-              this.step(element, event);
+              event = this.eventList.find(value => value.id.toString() === el);
+              element.poll?.links.push({ source: gate!.id.toString() , target: el});
+              console.log("ALA 2");
+              console.log(event!== undefined);
+              if(event!== undefined){
+                this.step(element, event);
+                nextGate = false;
+              }
+              else{
+                console.log("Next: "+ el);
+                nextId = Number(el);
+                nextGate = true;
+              }
             });
+            // gate?.parameters.forEach(element => {console.log(element)});
+            }  
           }
-          else{
-            let lane = element.poll.clusters.find(value => value.id === gateAnd?.resource.toString()+'P');
-            element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gateAnd!.id.toString());
-            console.log("ulala 3");
-          }
-
-        }else{
-        console.log("BUUUM");
-        console.log(this.xorList);
-        console.log(gateName);
-        console.log(gate);
-        console.log(Object.keys(gate!.percentages));
-        Object.keys(gate!.percentages).forEach(el => {console.log(el);
-          console.log("BUUUM");
-          event = this.eventList.find(value => value.id.toString() === el);
-          element.poll?.links.push({ source: gate!.id.toString() , target: el});
-          this.step(element, event);
-        });
-        // gate?.parameters.forEach(element => {console.log(element)});
-        }
-
         
       }
     }
     if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
+      console.log("UND KON");
       if(event?.output === null){
         if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
           let resorc = this.resourceList.find(value => value.id === event?.resource);
