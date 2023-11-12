@@ -46,7 +46,10 @@ export class ProcessesComponent implements OnInit{
   orList: GateList[]=[];
   andList: GateAndList[]=[];
   isRunning: boolean = false;
-  idSimulations: number[]=[];
+  //idSimulations: number[]=[];
+  idSimulation!: number;
+  idRunningSimulations: string[]=[];
+  idRunningSimulation: string | undefined;
   constructor(private processesService: ProcessesService, private route: ActivatedRoute,
     private router: Router){}
   
@@ -268,6 +271,39 @@ export class ProcessesComponent implements OnInit{
         
       }
     }
+
+    if( event?.id === element.startEvent! && event?.output === null){
+      let resorce = this.resourceList.find(value => value.id === event?.resource);
+      element.poll!.clusters.push( {
+        id: event.resource.toString()+'P',
+        label: resorce?.name,
+        childNodeIds: [event.id.toString()]
+      })
+      
+      element.poll!.nodes.push( {
+        id: 's',
+        label: 'start',
+        data: {shape: 'circle'}
+      });
+      let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+      element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('s');
+      element.poll?.links.push({ source:'s' , target: event.id.toString()});
+      element.poll!.nodes.push( {
+        id: event.id.toString(),
+        label: event.name,
+        data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
+          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+      })
+      element.poll?.links.push({ source:event.id.toString() , target: 'k'+event.id.toString()});
+      element.poll!.nodes.push( {
+        id: 'k'+event.id.toString(),
+        label: 'koniec',
+        data: {shape: 'circle'}
+      });
+      lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
+      element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k'+event.id.toString());
+      }
+      
     // if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
     //   console.log("UND KON");
     //   console.log(event);
@@ -338,9 +374,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         if(this.processesList.length ===0) this.router.navigateByUrl('/models');
         this.processesList.forEach(element => {
           if (element.simulation !== undefined) {
-            if (!this.idSimulations.includes(element.simulation)) {
-              this.idSimulations.push(element.simulation);
-            }
+            this.idSimulation= element.simulation;
           }
           console.log(element.generator);
           const startEvent = this.generatorList.find(value => value.id === element.generator);
@@ -437,14 +471,31 @@ const idString = this.route.snapshot.paramMap.get('processesid');
 
 //   symulation();
 // }
-  onStart(){
+  async onStart(){
     console.log("Start");
     this.isRunning = true;
-    for(let i = 0; i < this.idSimulations.length; i++) {
-      this.processesService.getRun(this.idSimulations[i]).subscribe(data => {
-        console.log(data);
-      });
-    }
+    // this.processesService.getRun(this.idSimulation).subscribe(data => {
+    //   console.log("start");
+    //   console.log(data);
+    //   this.idRunningSimulation=data;
+    // });
+    try {
+      console.log("Przed pobraniem danych");
+      const data = await this.processesService.getRun(this.idSimulation).toPromise();
+      console.log("Po pobraniu danych");
+      console.log(data);
+      this.idRunningSimulation = data;
+  } catch (error) {
+      console.error("Wystąpił błąd podczas pobierania danych", error);
+      // Dodaj odpowiednią obsługę błędu tutaj
+  }
+    // for(let i = 0; i < this.idSimulations.length; i++) {
+    //   this.processesService.getRun(this.idSimulation).subscribe(data => {
+    //     console.log("start");
+    //     console.log(data);
+    //     this.idRunningSimulations.push(data);
+    //   });
+    // }
     // this.processesService.getRun(1).subscribe(data => {
     //   console.log(data);
     // });
@@ -476,6 +527,15 @@ const idString = this.route.snapshot.paramMap.get('processesid');
           console.log(this.pollList);
           
           await this.sleep(1000);
+          this.processesService.getRunningSimulation(this.idRunningSimulation!).subscribe(data => {
+            console.log(data);
+          });
+
+          // this.idRunningSimulations.forEach( async idSym =>{
+          //   let simulationStatus = await this.processesService.getRunningSimulation(idSym).toPromise(); // Poczekaj na dane
+          //   console.log(simulationStatus);
+          // })
+          
         }
         console.log("koniec");
       }
