@@ -529,6 +529,10 @@ const idString = this.route.snapshot.paramMap.get('processesid');
           await this.sleep(1000);
           this.processesService.getRunningSimulation(this.idRunningSimulation!).subscribe(data => {
             console.log(data);
+            if( data === "SUCCEED"){
+              this.isRunning = false;
+              this.router.navigateByUrl(`/report/${this.idRunningSimulation}`);
+            }
           });
 
           // this.idRunningSimulations.forEach( async idSym =>{

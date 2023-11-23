@@ -7,7 +7,7 @@ import { ReportComponent } from './report/report.component';
 const routes: Routes = [
   { path:'models', component: ModelsComponent},
   // { path:'models/processes', component: ProcessesComponent},
-  { path:'report', component: ReportComponent},
+  { path:'report/:raportid', component: ReportComponent},
   // { path:'processes', component: ProcessesComponent},
   // { path:'**',component: ProcessesComponent},
   { path:'processes/:processesid', component: ProcessesComponent},
@@ -15,7 +15,7 @@ const routes: Routes = [
   // , canActivate: [LoginGuard]
 // },
 { path:'models', component: ModelsComponent},
-{ path:'**',redirectTo:'/models', pathMatch:'full'},
+//{ path:'**',redirectTo:'/models', pathMatch:'full'},
 ];
 
 @NgModule({

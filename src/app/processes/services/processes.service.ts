@@ -45,7 +45,7 @@ export class ProcessesService {
     return this.http.get<string>(`http://localhost:8000/processes/simulations/run/${id}`);
   }
   getRunningSimulation(id: string): Observable<any> {
-    return this.http.get<string>(`http://localhost:8000/processes${id}`);
+    return this.http.get<string>(`http://localhost:8000/processes/simulations/status/${id}`);
   }
 
 
