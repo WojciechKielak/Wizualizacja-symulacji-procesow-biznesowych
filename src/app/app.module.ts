@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { ModelsModule } from './models/models.module';
+import {MatTableModule} from '@angular/material/table';
+import { ReportModule } from './report/report.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -32,6 +34,8 @@ import { ModelsModule } from './models/models.module';
     MatListModule,
     RouterModule,
     ModelsModule,
+    MatTableModule,
+    ReportModule // Dodaj ReportModule w sekcji imports
   ],
   providers: [],
   bootstrap: [AppComponent]

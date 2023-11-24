@@ -2,8 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { ReportService } from './services/report.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataReport, Resource } from './reportList';
-import { MatTableDataSource } from '@angular/material/table';
 import { EventReportList } from './eventReport';
+import { DataSource } from '@angular/cdk/table';
+import { MatTableDataSource } from '@angular/material/table';
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
+  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
+  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
+  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
+  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
+  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
+  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+];
+
 
 @Component({
   selector: 'app-report',
@@ -11,92 +33,18 @@ import { EventReportList } from './eventReport';
   styleUrls: ['./report.component.scss']
 })
 export class ReportComponent implements OnInit{
-
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource = ELEMENT_DATA;
+ // dataSource = new MatTableDataSource(ELEMENT_DATA);
   constructor(private reportService: ReportService, private route: ActivatedRoute,
     private router: Router){}
   reportList : DataReport | undefined;
   reportEventList: EventReportList[]=[];
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  //displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
     ngOnInit(): void {
     
     try {
       console.log("Przed pobraniem raportu " + this.route.snapshot.paramMap.get('raportid') );
-      //this.reportList = this.reportService.getRunningSimulation(this.route.snapshot.paramMap.get('raportid')!);
-      // this.reportService.getRunningSimulation(this.route.snapshot.paramMap.get('raportid')!).subscribe(data => {
-      //       console.log(data);
-      //       this.reportList = data;
-      //       const keys = Object.keys(this.reportList!.statistics.resources);
-      //       keys.forEach(key => {
-      //         const resource = this.reportList!.statistics.resources[key];
-      //     // Tutaj możesz użyć `resource` do wykonywania operacji na poszczególnych zasobach
-      //       console.log(resource); // Przykładowe wykorzystanie zasobu
-      //       resource.forEach( event =>
-      //         this.reportEventList.push(key,event)
-
-      //       )
-      //       });
-      //     });
-      // this.reportService.getRunningSimulation(this.route.snapshot.paramMap.get('raportid')!).subscribe(data => {
-      //   console.log(data);
-      //   this.reportList = data;
-      //   const keys = Object.keys(this.reportList!.statistics.resources);
-        
-      //   keys.forEach(key => {
-      //     const resource = this.reportList!.statistics.resources[key];
-      //     console.log(resource);
-      //     // Sprawdź, czy aktualny klucz jest typu obiektowego (zasób, nie ogólna wartość)
-      //     if (
-      //       typeof resource === 'object' &&
-      //       'avg' in resource &&
-      //       'sum' in resource &&
-      //       'median' in resource &&
-      //       'max_time' in resource &&
-      //       'min_time' in resource &&
-      //       'tasks_execute' in resource &&
-      //       'tasks_pending' in resource &&
-      //       'tasks_realized' in resource &&
-      //       'number_of_employee' in resource
-      //     ) {
-      //       // const eventReport: EventReportList = {
-      //       //   name: key,
-      //       //   resource: resource.sum, // Przykładowe mapowanie, można zmieniać według potrzeb
-      //       //   savg: resource.avg,
-      //       //   max_time: resource.max_time,
-      //       //   median: resource.median,
-      //       //   min_time: resource.min_time,
-      //       //   number_of_employee: resource.number_of_employee,
-      //       //   sum: resource.sum,
-      //       //   tasks_execute: resource.tasks_execute,
-      //       //   tasks_pending: resource.tasks_pending,
-      //       //   tasks_realized: resource.tasks_realized,
-      //       // };
-      
-      //       // // Dodaj obiekt zdarzenia do tablicy reportEventList
-      //       // this.reportEventList.push(eventReport);
-      //     }
-      //   });
-      // });
-      // this.reportService.getRunningSimulation(this.route.snapshot.paramMap.get('raportid')!).subscribe(data => {
-      //       console.log(data);
-      //       this.reportList = data;
-      //       const keys = Object.keys(this.reportList!.statistics.resources);
-      //       keys.forEach(key => {
-      //         const resource = this.reportList!.statistics.resources[key];
-      //     // Tutaj możesz użyć `resource` do wykonywania operacji na poszczególnych zasobach
-      //       console.log(resource); // Przykładowe wykorzystanie zasobu
-      //       // resource.forEach( event =>
-      //       //   this.reportEventList.push(key,event)
-      //       const keys2 = Object.keys(resource);
-      //       console.log("K ");
-      //       console.log(keys2);
-      //         keys2.forEach(event =>{
-      //          console.log(event);
-      //         }
-                
-      //           )
-      //       // )
-      //       });
-      //     });
       this.reportService.getRunningSimulation(this.route.snapshot.paramMap.get('raportid')!).subscribe(data => {
         console.log(data);
         this.reportList = data;
@@ -130,20 +78,9 @@ export class ReportComponent implements OnInit{
                   tasks_pending: eventData.tasks_pending,
                   tasks_realized: eventData.tasks_realized,
                 });
-                console.log(key +" " +event  +" " + eventData.avg +" " + eventData.max_time+" " +eventData.median +" " +eventData.min_time
-                +" " + eventData.min_time+" " +eventData.number_of_employee+" " + eventData.sum +" " +eventData.tasks_execute +" " + eventData.tasks_pending+" " + eventData.tasks_realized);
-                console.log(this.reportEventList);
               }
             });
-            // keys2.forEach(event => {
-            //   if (!isMetadataKey(event)) {
-            //     console.log(key);
-            //     console.log(event);
-            //     console.log(resource[event]);
-            //     console.log(resource[event]?.avg);
-            //     //this.reportEventList.push(new EventReportList(key,event,resource[event].avg,))
-            //   }
-            // });
+
           }
         });
         console.log(this.reportEventList);
