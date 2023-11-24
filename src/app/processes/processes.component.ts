@@ -526,7 +526,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
           console.log("A");
           console.log(this.pollList);
           
-          await this.sleep(1000);
+          
           this.processesService.getRunningSimulation(this.idRunningSimulation!).subscribe(data => {
             console.log(data);
             if( data === "SUCCEED"){
@@ -534,7 +534,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
               this.router.navigateByUrl(`/report/${this.idRunningSimulation}`);
             }
           });
-
+          await this.sleep(1000);
           // this.idRunningSimulations.forEach( async idSym =>{
           //   let simulationStatus = await this.processesService.getRunningSimulation(idSym).toPromise(); // Poczekaj na dane
           //   console.log(simulationStatus);
