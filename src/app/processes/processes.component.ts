@@ -527,10 +527,11 @@ const idString = this.route.snapshot.paramMap.get('processesid');
           console.log(this.pollList);
           
           
-          this.processesService.getRunningSimulation(this.idRunningSimulation!).subscribe(data => {
+          this.processesService.getRunningSimulation(this.idRunningSimulation!).subscribe(async data => {
             console.log(data);
             if( data === "SUCCEED"){
               this.isRunning = false;
+              await this.sleep(1000);
               this.router.navigateByUrl(`/report/${this.idRunningSimulation}`);
             }
           });

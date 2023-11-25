@@ -16,12 +16,11 @@ export class ReportComponent implements OnInit{
   displayedColumns: string[] = [ 'name', 'savg', 'max_time', 'median', 'min_time', 'number_of_employee', 'sum',
    'tasks_execute', 'tasks_pending', 'tasks_realized'];
 
- // dataSource = new MatTableDataSource(ELEMENT_DATA);
   constructor(private reportService: ReportService, private route: ActivatedRoute,
     private router: Router){}
   reportList : DataReport | undefined;
   reportEventList: EventReportList[]=[];
-  //displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
     ngOnInit(): void {
     
     try {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReportComponent } from './report.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatListModule} from '@angular/material/list';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import {MatListModule} from '@angular/material/list';
   imports: [
     CommonModule,
     MatTableModule,
-    MatListModule
+    MatListModule,
+    RouterModule,
   ],
   exports:[ MatTableModule ]
 })
