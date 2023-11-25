@@ -86,15 +86,15 @@ export class ProcessesComponent implements OnInit{
       element.poll!.nodes.push( {
         id: event.id.toString(),
         label: event.name,
-        data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
-          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+        data: {shape: '',task:event.type, monitor_pending: 0, 
+          monitor_execute: 0,monitor_realized: 0}
       })
       }else{
         element.poll!.nodes.push( {
           id: event.id.toString(),
           label: event.name,
-          data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
-          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+          data: {shape: '',task:event.type, monitor_pending: 0, 
+          monitor_execute: 0,monitor_realized:  0}
           });
       }
       let nextId = event.output;
@@ -121,8 +121,8 @@ export class ProcessesComponent implements OnInit{
             element.poll!.nodes.push( {
               id: event.id.toString(),
               label: event.name,
-              data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
-              monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+              data: {shape: '',task:event.type, monitor_pending: 0, 
+              monitor_execute: 0,monitor_realized:  0}
             });
     
             element.poll!.nodes.push( {
@@ -291,8 +291,8 @@ export class ProcessesComponent implements OnInit{
       element.poll!.nodes.push( {
         id: event.id.toString(),
         label: event.name,
-        data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
-          monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
+        data: {shape: '',task:event.type, monitor_pending: 0, 
+          monitor_execute: 0,monitor_realized:  0}
       })
       element.poll?.links.push({ source:event.id.toString() , target: 'k'+event.id.toString()});
       element.poll!.nodes.push( {
@@ -485,6 +485,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
       console.log("Po pobraniu danych");
       console.log(data);
       this.idRunningSimulation = data;
+      await this.sleep(500);
   } catch (error) {
       console.error("Wystąpił błąd podczas pobierania danych", error);
       // Dodaj odpowiednią obsługę błędu tutaj

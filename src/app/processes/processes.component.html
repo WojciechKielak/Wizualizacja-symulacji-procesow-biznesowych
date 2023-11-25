@@ -93,6 +93,18 @@
           [attr.height]="node.dimension.height"
           [attr.fill]="node.data.color" 
         />
+        <svg:rect *ngIf="node.data.monitor_execute > 0 "
+          
+          [attr.width]="node.dimension.width"
+          [attr.height]="node.dimension.height"
+          [attr.fill]="'green'" 
+        />
+        <svg:rect *ngIf="node.data.monitor_execute === 0 && node.data.monitor_pending > 0"
+          
+          [attr.width]="node.dimension.width"
+          [attr.height]="node.dimension.height"
+          [attr.fill]="'yellow'" 
+        />
 
         <svg:foreignObject
         *ngIf="node.data.task==='USER'"
