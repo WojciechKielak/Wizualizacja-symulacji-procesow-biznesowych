@@ -4,6 +4,7 @@ import { ModelsComponent } from './models.component';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import {MatListModule} from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import {MatListModule} from '@angular/material/list';
     RouterModule,
     HttpClientModule,
     MatListModule,
+    MatIconModule,
   ]
 })
 export class ModelsModule { }

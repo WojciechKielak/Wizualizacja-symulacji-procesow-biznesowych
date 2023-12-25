@@ -1,4 +1,11 @@
-<button (click)="onStart()" type="submit">Start</button>
+
+<div class="button-container">
+  <button (click)="onStart()" type="submit" class="btn btn-primary custom-button">Start</button>
+  <button (click)="onStop()"class="btn btn-primary custom-button">Stop</button>
+  <button (click)="onReset()"class="btn btn-primary custom-button">Reset</button>
+  <button routerLink="/models" class="btn btn-primary custom-button">Powrót</button>
+</div>
+<!-- <button (click)="onStart()" type="submit">Start</button>
 <div>
     <button (click)="onStop()">Stop</button>
 </div>
@@ -7,18 +14,13 @@
 </div>
 <div>
   <button routerLink="/models">Powrót</button>
-</div>
-<p>processes works!</p>
-<mat-icon>perm_identity</mat-icon>
+</div> -->
 
-<mat-selection-list #org [multiple]="false">
+<mat-selection-list #org [multiple]="false" class="list-container">
   <mat-list-option *ngFor="let proces of pollList" [value]="proces">
     {{proces.name}}
   </mat-list-option>
 </mat-selection-list>
-<p *ngIf="org.selectedOptions.hasValue()">
-  Option selected: {{org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : 'None'}}
-</p>
 
 <ngx-graph *ngIf="org.selectedOptions.hasValue()"
   class="chart-container"
@@ -42,9 +44,9 @@
       <svg:rect
         [attr.width]="cluster.dimension.width" 
         [attr.height]="cluster.dimension.height "
-        [attr.stroke]="'red'"
+        [attr.stroke]="'#070708'"
         [attr.stroke-width]="3" 
-        [attr.fill]="'steelblue'"
+        [attr.fill]="'#0F7AF4'"
         [attr.rx]="cluster.data.borderRadius" 
       />
       <svg:text 
@@ -59,11 +61,11 @@
       <svg:rect
         [attr.width]="cluster.dimension.height" 
         [attr.height]="40"
-        [attr.fill]="'steelblue'"
+        [attr.fill]="'#0F7AF4'"
         [attr.x]="-cluster.dimension.height"
         [attr.y]="-40"
         transform="rotate(270)"
-        [attr.stroke]="'red'"
+        [attr.stroke]="'#070708'"
         [attr.stroke-width]="3" 
       />
     </svg:g>
@@ -77,33 +79,33 @@
         [attr.cx]="node.dimension.width / 2"
         [attr.cy]="node.dimension.height / 2"
         [attr.r]="node.dimension.height/ 2"
-        [attr.fill]="'green'"
+        [attr.fill]="'#600000'"
 
       />
 
       
       <svg:polygon *ngSwitchCase="'diamond'" 
       [attr.points]="diamondPoints(node.dimension.width, node.dimension.height)"
-      [attr.fill]="node.data.color"
+      [attr.fill]="'#004AD2'"
       />
 
 
         <svg:rect *ngSwitchCase="''" 
           [attr.width]="node.dimension.width"
           [attr.height]="node.dimension.height"
-          [attr.fill]="node.data.color" 
+          [attr.fill]="'#EEE0CB'" 
         />
         <svg:rect *ngIf="node.data.monitor_execute > 0 "
           
           [attr.width]="node.dimension.width"
           [attr.height]="node.dimension.height"
-          [attr.fill]="'green'" 
+          [attr.fill]="'#05F946'" 
         />
         <svg:rect *ngIf="node.data.monitor_execute === 0 && node.data.monitor_pending > 0"
           
           [attr.width]="node.dimension.width"
           [attr.height]="node.dimension.height"
-          [attr.fill]="'yellow'" 
+          [attr.fill]="'#E7F800'" 
         />
 
         <svg:foreignObject
@@ -197,198 +199,6 @@
       </svg:text>
       <svg:text *ngSwitchCase="''" alignment-baseline="central" [attr.x]="-1-8*node.data.monitor_realized?.toString().length" [attr.y]="node.dimension.height-8">
         {{node.data.monitor_realized}}
-      </svg:text>
-
-      </ng-container>
-    </svg:g>
-  </ng-template>
-
-  <ng-template #linkTemplate let-link>
-    <svg:g class="edge">
-      <svg:path class="line" stroke-width="2" marker-end="url(#arrow)"></svg:path>
-      <svg:text class="edge-label" text-anchor="middle">
-        <textPath
-          class="text-path"
-          [attr.href]="'#' + link.id"
-          [style.dominant-baseline]="link.dominantBaseline"
-          startOffset="50%"
-        >
-          {{link.label}}
-        </textPath>
-      </svg:text>
-    </svg:g>
-  </ng-template>
-  
-</ngx-graph>
-
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-</svg>
-<ngx-graph
-  class="chart-container"
-  [view]="[1400, 700]"
-  [draggingEnabled]= true
-  [links]="links"
-  [nodes]="nodes"
-  [clusters]="clusters"
-  [layout]="layout"
-  [curve]="myCurve"
-
->
-  <ng-template #defsTemplate>
-    <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
-      <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
-    </svg:marker>
-  </ng-template>
-  
-  <ng-template #clusterTemplate let-cluster>
-    <svg:g class="node cluster">
-      <svg:rect
-        [attr.width]="cluster.dimension.width" 
-        [attr.height]="cluster.dimension.height "
-        [attr.stroke]="'red'"
-        [attr.stroke-width]="3" 
-        [attr.fill]="'steelblue'"
-        [attr.rx]="cluster.data.borderRadius" 
-      />
-      <svg:text 
-        alignment-baseline="central" 
-        [attr.x]="-cluster.dimension.height/2- cluster.label.length*3.5"
-        [attr.y]="-20"
-        transform="rotate(270)"
-      >
-        {{cluster.label}}
-      </svg:text>
-
-      <svg:rect
-        [attr.width]="cluster.dimension.height" 
-        [attr.height]="40"
-        [attr.fill]="'steelblue'"
-        [attr.x]="-cluster.dimension.height"
-        [attr.y]="-40"
-        transform="rotate(270)"
-        [attr.stroke]="'red'"
-        [attr.stroke-width]="3" 
-      />
-    </svg:g>
-  </ng-template>
-
-<ng-template #nodeTemplate let-node>
-    <svg:g class="node">
-      <ng-container [ngSwitch]="node.data.shape">
-        
-        <svg:circle *ngSwitchCase="'circle'" 
-        [attr.cx]="node.dimension.width / 2"
-        [attr.cy]="node.dimension.height / 2"
-        [attr.r]="node.dimension.height/ 2"
-        [attr.fill]="'green'"
-
-      />
-
-      
-      <svg:polygon *ngSwitchCase="'diamond'" 
-      [attr.points]="diamondPoints(node.dimension.width, node.dimension.height)"
-      [attr.fill]="node.data.color"
-      />
-
-
-        <svg:rect *ngSwitchCase="" 
-          [attr.width]="node.dimension.width"
-          [attr.height]="node.dimension.height"
-          [attr.fill]="node.data.color" 
-        />
-
-        <svg:foreignObject
-        *ngIf="node.data.task==='user'"
-        [attr.width]="node.dimension.width/2"
-        [attr.height]="node.dimension.height/2"
-        [attr.y]="'-2px'"
-      >
-        <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
-          <mat-icon style="font-size: 18px;">perm_identity</mat-icon>
-        </div>
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
-        </svg> -->
-      </svg:foreignObject>
-
-      <svg:foreignObject
-        *ngIf="node.data.task==='manual'"
-        [attr.width]="node.dimension.width/2"
-        [attr.height]="node.dimension.height/2"
-        transform="rotate(90)"
-        [attr.y]="'-15px'"
-
-      >
-        <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
-          <mat-icon style="font-size: 15px;">pan_tool</mat-icon>
-        </div>
-      </svg:foreignObject>
-
-      <svg:foreignObject
-      *ngIf="node.data.task==='service'"
-      [attr.width]="node.dimension.width"
-      [attr.height]="node.dimension.height"
-    >
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
-      <mat-icon style="font-size: 15px;">settings</mat-icon>
-    </div>
-    </svg:foreignObject>
-
-    <svg:foreignObject
-      *ngIf="node.data.gate==='xor'"
-      [attr.width]="30"
-      [attr.height]="30"
-      [attr.x]="node.dimension.width/2 - 26/2"
-      [attr.y]="node.dimension.height/2 - 26/2"
-    >
-    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-    </svg>
-    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-    </svg> -->
-    </svg:foreignObject>
-
-    <svg:foreignObject
-      *ngIf="node.data.gate==='or'"
-      [attr.width]="30"
-      [attr.height]="30"
-      [attr.x]="node.dimension.width/2 - 26/2"
-      [attr.y]="node.dimension.height/2 - 26/2"
-    >
-    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
-      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-    </svg>
-    </svg:foreignObject>
-
-    <svg:foreignObject
-      *ngIf="node.data.gate==='and'"
-      [attr.width]="30"
-      [attr.height]="30"
-      [attr.x]="node.dimension.width/2 - 30/2"
-      [attr.y]="node.dimension.height/2 - 30/2"
-    >
-    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-    </svg> -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-      <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-    </svg>
-    </svg:foreignObject>
-      
-      <svg:text *ngSwitchCase="" alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
-          
-      {{node.label}}
-      </svg:text>
-      <svg:text *ngSwitchCase="" alignment-baseline="central" [attr.x]="-2-8*node.data.d1?.toString().length" [attr.y]="8">
-        {{node.data.d1}}
-      </svg:text>
-      <svg:text *ngSwitchCase="" alignment-baseline="central" [attr.x]="node.dimension.width+2" [attr.y]="8">
-        {{node.data.d2}}
-      </svg:text>
-      <svg:text *ngSwitchCase="" alignment-baseline="central" [attr.x]="-1-8*node.data.d3?.toString().length" [attr.y]="node.dimension.height-8">
-        {{node.data.d3}}
       </svg:text>
 
       </ng-container>

@@ -48,5 +48,13 @@ export class ProcessesService {
     return this.http.get<string>(`http://localhost:8000/processes/simulations/status/${id}`);
   }
 
+  getEnd(id: number): Observable<any> {
+    return this.http.get<string>(`http://localhost:8000/processes/simulations/end/${id}`);
+  }
+
+  getStop(id: number): Observable<any> {
+    return this.http.get<string>(`http://localhost:8000/processes/simulations/end/${id}`);
+  }
+
 
 }

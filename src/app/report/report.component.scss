@@ -1,3 +1,46 @@
 .center-cell {
     text-align: center;
   }
+  .text-left {
+    margin-left: 10px;
+  }
+
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    margin-top: 1%;
+  }
+  
+
+
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .custom-button {
+    background-color: #007bff; /* Przykładowy kolor */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .custom-button:hover {
+    background-color: #0056b3; /* Ciemniejszy odcień dla efektu najechania */
+  }
+  
+  .custom-button:disabled {
+    background-color: #cccccc;
+    cursor: default;
+  }
+  
+  

@@ -1,17 +1,20 @@
-<p>models works!</p>
-<!-- <button routerLink="/processes">Symuluj</button> -->
-<!-- <button [routerLink]=['/processes',organization.id]>Symuluj</button> -->
-<button class="btn btn-primary"  [disabled]="!org.selectedOptions.hasValue()"
+<div class="button-container">
+  <button class="btn btn-primary custom-button" [disabled]="!org.selectedOptions.hasValue()"
+          [routerLink]="['/processes', org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : '']">
+    Symuluj
+  </button>
+</div>
+<!-- <button class="btn btn-primary"  [disabled]="!org.selectedOptions.hasValue()"
         [routerLink]="['/processes', org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : '']">
   Symuluj
-</button>
+</button> -->
 
-<mat-selection-list #org [multiple]="false">
+<mat-selection-list #org [multiple]="false" class="list-container">
     <mat-list-option *ngFor="let organization of organizationList" [value]="organization.id">
       {{organization.name}}
     </mat-list-option>
   </mat-selection-list>
-  <mat-list *ngIf="org.selectedOptions.hasValue() && processesList">
+  <mat-list *ngIf="org.selectedOptions.hasValue() && processesList" class="list-container">
     <ng-container *ngFor="let proces of processesList">
       <mat-list-item *ngIf="proces.organization === org.selectedOptions.selected[0].value">
         {{proces.name}}
@@ -20,9 +23,9 @@
   </mat-list>
   
   
-  <p *ngIf="org.selectedOptions.hasValue()">
+  <!-- <p *ngIf="org.selectedOptions.hasValue()">
     Option selected: {{org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : 'None'}}
-  </p>
+  </p> -->
 
 
   

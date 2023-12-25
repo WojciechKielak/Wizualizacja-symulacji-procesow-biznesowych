@@ -5,6 +5,7 @@ import { DataReport, Resource } from './reportList';
 import { EventReportList } from './eventReport';
 import { DataSource } from '@angular/cdk/table';
 import { MatTableDataSource } from '@angular/material/table';
+import { ProcessReportList } from './processReport';
 
 
 @Component({
@@ -15,11 +16,14 @@ import { MatTableDataSource } from '@angular/material/table';
 export class ReportComponent implements OnInit{
   displayedColumns: string[] = [ 'name', 'savg', 'max_time', 'median', 'min_time', 'number_of_employee', 'sum',
    'tasks_execute', 'tasks_pending', 'tasks_realized'];
+   processColumns: string[] = [ 'name', 'number', 'min_cycle', 'avg_cycle', 'max_cycle',
+   'min_work', 'avg_work', 'max_work', 'min_wait', 'avg_wait', 'max_wait'];
 
   constructor(private reportService: ReportService, private route: ActivatedRoute,
     private router: Router){}
   reportList : DataReport | undefined;
   reportEventList: EventReportList[]=[];
+  reportProcessList: ProcessReportList[]=[];
 
     ngOnInit(): void {
     
@@ -85,5 +89,14 @@ export class ReportComponent implements OnInit{
       console.error("Wystąpił błąd podczas pobierania raportu", error);
       // Dodaj odpowiednią obsługę błędu tutaj
   }
+
+  // this.reportService.getProcesses(this.route.snapshot.paramMap.get('raportid')!).subscribe((response) => {
+  //     this.reportProcessList=response;
+  //     console.log(response);
+  //   });
+  this.reportProcessList = this.reportService.getProcesses(this.route.snapshot.paramMap.get('raportid')!);
+  console.log(this.reportProcessList);
+
+
   }
 }

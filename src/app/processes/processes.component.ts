@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Node, Edge, ClusterNode, Layout } from '@swimlane/ngx-graph';
-import { nodes, clusters, links, nodess, clusterss, linkss } from './data';
 import {myLayout} from './MyLayout'
-import * as shape from 'd3-shape';
 import customCurve from './MyCurve';
 import { ProcessesService } from './services/processes.service';
 import { OrganizationList } from '../models/organization';
@@ -15,8 +13,7 @@ import { PollList } from './poll';
 import { forkJoin } from 'rxjs';
 import { GateList } from './gate';
 import { interval } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
-import { Numeric } from 'd3';
+
 import { GateAndList } from './gateAnd';
 
 @Component({
@@ -33,9 +30,9 @@ export class ProcessesComponent implements OnInit{
   // myCurve: any = shape.curveStep;
 
   id: number =0;
-  nodes: Node[] = nodes;
-  links: Edge[] = links;
-  clusters: ClusterNode[] = clusters;
+  nodes: Node[] = [];
+  links: Edge[] = [];
+  clusters: ClusterNode[] = [];
   organizationList: OrganizationList[] = [];
   processesList: ProcessList[] = [];
   eventList: EventList[] = [];
@@ -419,12 +416,43 @@ const idString = this.route.snapshot.paramMap.get('processesid');
     return `0,${halfHeight} ${halfWidth},0 ${width},${halfHeight} ${halfWidth},${height} 0,${halfHeight}`;
   }
 
-  onStop(){
-    // this.nodes=nodess;
-    // this.links=linkss;
-    // this.clusters = clusterss;
-    // console.log(this.nodes);
+  async onStop(){
     this.isRunning = false;
+    try {
+      console.log("Przed stop");
+      const data = await this.processesService.getEnd(this.idSimulation).toPromise();
+      console.log("Po stop");
+      console.log(data);
+  } catch (error) {
+      console.error("Wystąpił błąd podczas resecie symulacji", error);
+  }
+  }
+  async onReset(){
+    this.isRunning = false;
+    // this.processesService.getEnd(this.idSimulation).subscribe((response) => {
+    //   this.organizationList=response;
+    //   console.log(response);
+    // });
+
+    try {
+      console.log("Przed reset");
+      const data = await this.processesService.getEnd(this.idSimulation).toPromise();
+      console.log("Po reset");
+      console.log(data);
+
+  } catch (error) {
+      console.error("Wystąpił błąd podczas resecie symulacji", error);
+  }
+  this.pollList.forEach(element => {
+    element.poll.nodes.forEach( eve => {
+      if( eve.data.shape === ""){
+          eve.data.monitor_pending= 0;
+          eve.data.monitor_execute= 0;
+          eve.data.monitor_realized= 0;
+      }
+    })
+
+  });
   }
 
   sleep(ms: number) {
@@ -485,7 +513,7 @@ const idString = this.route.snapshot.paramMap.get('processesid');
       console.log("Po pobraniu danych");
       console.log(data);
       this.idRunningSimulation = data;
-      await this.sleep(500);
+      await this.sleep(100);
   } catch (error) {
       console.error("Wystąpił błąd podczas pobierania danych", error);
       // Dodaj odpowiednią obsługę błędu tutaj

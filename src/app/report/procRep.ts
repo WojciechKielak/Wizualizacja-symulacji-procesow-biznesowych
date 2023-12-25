@@ -1,0 +1,55 @@
+import { ProcessReportList } from "./processReport";
+
+export const rep: ProcessReportList[] = [
+    {
+        name: "Proces 1",
+        number: 10,
+        min_cycle: 2,
+        avg_cycle: 5,
+        max_cycle: 8,
+        min_work: 1,
+        avg_work: 4,
+        max_work: 7,
+        min_wait: 2,
+        avg_wait: 3,
+        max_wait: 6,
+    },{
+        name: "Proces 2",
+        number: 15,
+        min_cycle: 3,
+        avg_cycle: 6,
+        max_cycle: 9,
+        min_work: 2,
+        avg_work: 5,
+        max_work: 8,
+        min_wait: 3,
+        avg_wait: 4,
+        max_wait: 7,
+    }
+    ,{
+        name: "Proces 3",
+        number: 20,
+        min_cycle: 4,
+        avg_cycle: 7,
+        max_cycle: 10,
+        min_work: 3,
+        avg_work: 6,
+        max_work: 9,
+        min_wait: 4,
+        avg_wait: 5,
+        max_wait: 8,
+    },
+    {
+        name: "Proces 4",
+        number: 25,
+        min_cycle: 5,
+        avg_cycle: 8,
+        max_cycle: 11,
+        min_work: 4,
+        avg_work: 7,
+        max_work: 10,
+        min_wait: 5,
+        avg_wait: 6,
+        max_wait: 9,
+    }
+  ]

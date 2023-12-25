@@ -4,3 +4,45 @@
     }
   }
   
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .custom-button {
+    background-color: #007bff; /* Przykładowy kolor */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .custom-button:hover {
+    background-color: #0056b3; /* Ciemniejszy odcień dla efektu najechania */
+  }
+  
+  .custom-button:disabled {
+    background-color: #cccccc;
+    cursor: default;
+  }
+  
+
+
+  .list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    width: 80%; /* Możesz dostosować szerokość według potrzeb */
+  }
+  
+  mat-selection-list, mat-list {
+    width: 100%;
+    max-width: 900px; /* Ogranicza maksymalną szerokość listy */
+  }
+  
