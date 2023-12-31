@@ -38,8 +38,8 @@ export class myLayout implements Layout {
 
       defaultSettings: DagreSettings = {
         orientation: Orientation.LEFT_TO_RIGHT,
-        marginX: 20,
-        marginY: 20,
+        marginX: 40,
+        marginY: 10,
         edgePadding: 0,
         rankPadding: 100,
         nodePadding: 100,
@@ -53,9 +53,7 @@ export class myLayout implements Layout {
       dagreNodes: Node[] = [];
       dagreClusters: ClusterNode[] = [];
       dagreEdges: any;
-      gr: any;
-      x:number = 0;
-      w:number = 0;
+
       clusterID!:string;
     
       run(graph: Graph): Graph {
@@ -68,11 +66,12 @@ export class myLayout implements Layout {
         
         const dagreToOutput = (node:Node) => {
           const dagreNode = this.dagreGraph._nodes[node.id];
+          // console.log("degere");
           // console.log(this.dagreGraph);
           // console.log(Object.keys(this.dagreGraph._preds[node.id]).length === 0);
         if(Object.keys(this.dagreGraph._preds[node.id]).length === 0){
           this.clusterID = this.dagreGraph._parent[node.id]
-          // console.log(this.clusterID);
+           console.log(this.clusterID);
         }
         // console.log(dagreNode);
         if(dagreNode.data.shape === 'diamond' && dagreNode.dimension.height< 40 && dagreNode.dimension.width<40){
@@ -98,7 +97,8 @@ export class myLayout implements Layout {
         const dagreToOutput2 = (node:Node) => {
           const dagreNode = this.dagreGraph._nodes[node.id];
           const dagreNode2 = this.dagreGraph._nodes[this.clusterID];
-          // console.log(dagreNode);
+          console.log(dagreNode);
+          console.log("degere");
           return {
             ...node,
             position: {
@@ -113,8 +113,7 @@ export class myLayout implements Layout {
           
         };
         graph.nodes = graph.nodes.map(dagreToOutput);
-        this.gr = graph.nodes.map(dagreToOutput2);
-        this.x = 1;
+        //this.gr = graph.nodes.map(dagreToOutput2);
         graph.clusters = (graph.clusters || []).map(dagreToOutput2);
         // graph.nodes = graph.nodes.map(dagreToOutput);
     

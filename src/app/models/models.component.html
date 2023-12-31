@@ -1,5 +1,5 @@
 <div class="button-container">
-  <button class="btn btn-primary custom-button" [disabled]="!org.selectedOptions.hasValue()"
+  <button class="btn btn-primary custom-button " [disabled]="!org.selectedOptions.hasValue()"
           [routerLink]="['/processes', org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : '']">
     Symuluj
   </button>
