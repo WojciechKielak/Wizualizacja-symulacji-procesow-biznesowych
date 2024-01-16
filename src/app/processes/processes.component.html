@@ -24,7 +24,7 @@
 
 <ngx-graph *ngIf="org.selectedOptions.hasValue()"
   class="chart-container"
-  [view]="[1400, 700]"
+
   [draggingEnabled]= true
   [links]="pollList[pollList.indexOf(org.selectedOptions.selected[0].value)].poll!.links!"
   [nodes]="pollList[pollList.indexOf(org.selectedOptions.selected[0].value)].poll!.nodes!"
@@ -90,6 +90,8 @@
           [attr.width]="node.dimension.width"
           [attr.height]="node.dimension.height"
           [attr.fill]="'#EEE0CB'" 
+          [attr.rx]="10"  
+          [attr.ry]="10"  
         />
         <svg:rect *ngIf="node.data.monitor_execute > 0 "
       
@@ -108,7 +110,7 @@
         *ngIf="node.data.task==='USER'"
         [attr.width]="node.dimension.width/2"
         [attr.height]="node.dimension.height/2"
-        [attr.y]="'-2px'"
+        [attr.y]="'-3px'"
       >
         <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
           <mat-icon style="font-size: 18px;">perm_identity</mat-icon>
@@ -123,7 +125,8 @@
         [attr.width]="node.dimension.width/2"
         [attr.height]="node.dimension.height/2"
         transform="rotate(90)"
-        [attr.y]="'-15px'"
+        [attr.y]="'-14px'"
+        [attr.x]="'-1px'"
 
       >
         <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
@@ -132,9 +135,10 @@
       </svg:foreignObject>
 
       <svg:foreignObject
-      *ngIf="node.data.task==='service'"
+      *ngIf="node.data.task==='BUSINESS'"
       [attr.width]="node.dimension.width"
       [attr.height]="node.dimension.height"
+      [attr.y]="'-1px'"
     >
     <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
       <mat-icon style="font-size: 15px;">settings</mat-icon>
