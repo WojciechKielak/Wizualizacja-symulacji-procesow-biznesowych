@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ModuleServiceService } from './module-service.service';
-import { OrganizationList } from './organization';
-import { ProcessList } from './process';
+import { ModuleServiceService } from './services/module-service.service';
+import { OrganizationList } from './structures/organization';
+import { ProcessList } from './structures/process';
 
 @Component({
   selector: 'app-models',

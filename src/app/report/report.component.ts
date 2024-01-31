@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportService } from './services/report.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataReport, Resource } from './reportList';
-import { EventReportList } from './eventReport';
-import { ProcessReportList } from './processReport';
+import { DataReport, Resource } from './structures/reportList';
+import { EventReportList } from './structures/eventReport';
+import { ProcessReportList } from './structures/processReport';
 
 
 @Component({

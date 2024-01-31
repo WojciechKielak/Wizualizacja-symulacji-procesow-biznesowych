@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { ProcessList } from 'src/app/models/process';
-import { EventList } from '../event';
-import { ResourceList } from '../resource';
-import { GeneratorList } from '../generator';
-import { GateList } from '../gate';
-import { GateAndList } from '../gateAnd';
+import { ProcessList } from 'src/app/models/structures/process';
+import { EventList } from '../structures/event';
+import { ResourceList } from '../structures/resource';
+import { GeneratorList } from '../structures/generator';
+import { GateList } from '../structures/gate';
+import { GateAndList } from '../structures/gateAnd';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class ProcessesService {
 
   constructor(private http: HttpClient) { }
   getProcesses(id: number): Observable<any> {
-    console.log(id);
     return this.http.get<ProcessList[]>('http://localhost:8000/processes/')
       .pipe(
         map((processes: ProcessList[]) => processes.filter(process => process.organization === id))

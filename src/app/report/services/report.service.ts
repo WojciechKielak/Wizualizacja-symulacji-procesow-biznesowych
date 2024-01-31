@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DataReport } from '../reportList';
-import {rep} from '../procRep';
+import { DataReport } from '../structures/reportList';
+import {rep} from '../structures/procRep';
 @Injectable({
   providedIn: 'root'
 })

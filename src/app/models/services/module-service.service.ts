@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { OrganizationList } from './organization';
-import { ProcessList } from './process';
+import { OrganizationList } from '../structures/organization';
+import { ProcessList } from '../structures/process';
 
 @Injectable({
   providedIn: 'root'

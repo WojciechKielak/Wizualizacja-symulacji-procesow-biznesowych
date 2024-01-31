@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Node, Edge, ClusterNode, Layout } from '@swimlane/ngx-graph';
-import {myLayout} from './MyLayout'
-import customCurve from './MyCurve';
+import {myLayout} from './structures/MyLayout'
+import customCurve from './structures/MyCurve';
 import { ProcessesService } from './services/processes.service';
-import { OrganizationList } from '../models/organization';
-import { ProcessList } from '../models/process';
+import { OrganizationList } from '../models/structures/organization';
+import { ProcessList } from '../models/structures/process';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventList } from './event';
-import { ResourceList } from './resource';
-import { GeneratorList } from './generator';
-import { PollList } from './poll';
+import { EventList } from './structures/event';
+import { ResourceList } from './structures/resource';
+import { GeneratorList } from './structures/generator';
+import { PollList } from './structures/poll';
 import { forkJoin } from 'rxjs';
-import { GateList } from './gate';
-import { GateAndList } from './gateAnd';
+import { GateList } from './structures/gate';
+import { GateAndList } from './structures/gateAnd';
 
 @Component({
   selector: 'app-processes',
