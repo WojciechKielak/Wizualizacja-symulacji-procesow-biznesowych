@@ -1,10 +1,6 @@
-// .button-container {
-//     text-align: center;
-//     margin-bottom: 20px;
-//   }
-  
+
   .btn {
-    margin: 15px; /* Dodaje odstępy między przyciskami */
+    margin: 15px; 
   }
   .button-container {
     display: flex;
@@ -13,7 +9,7 @@
   }
   
   .custom-button {
-    background-color: #007bff; /* Przykładowy kolor */
+    background-color: #007bff; 
     color: white;
     padding: 10px 20px;
     border: none;
@@ -24,7 +20,7 @@
   }
   
   .custom-button:hover {
-    background-color: #0056b3; /* Ciemniejszy odcień dla efektu najechania */
+    background-color: #0056b3; 
   }
   
   .custom-button:disabled {
@@ -40,5 +36,5 @@
     flex-direction: column;
     align-items: center;
     margin: 20px auto;
-    width: 80%; /* Możesz dostosować szerokość według potrzeb */
+    width: 80%; 
   }

@@ -35,7 +35,7 @@ import { ReportModule } from './report/report.module';
     RouterModule,
     ModelsModule,
     MatTableModule,
-    ReportModule // Dodaj ReportModule w sekcji imports
+    ReportModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

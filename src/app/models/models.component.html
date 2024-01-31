@@ -4,11 +4,6 @@
     Symuluj
   </button>
 </div>
-<!-- <button class="btn btn-primary"  [disabled]="!org.selectedOptions.hasValue()"
-        [routerLink]="['/processes', org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : '']">
-  Symuluj
-</button> -->
-
 <mat-selection-list #org [multiple]="false" class="list-container">
     <mat-list-option *ngFor="let organization of organizationList" [value]="organization.id">
       {{organization.name}}
@@ -21,11 +16,6 @@
       </mat-list-item>
     </ng-container>
   </mat-list>
-  
-  
-  <!-- <p *ngIf="org.selectedOptions.hasValue()">
-    Option selected: {{org.selectedOptions.hasValue() ? org.selectedOptions.selected[0].value : 'None'}}
-  </p> -->
 
 
   

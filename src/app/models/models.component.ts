@@ -17,12 +17,10 @@ export class ModelsComponent implements OnInit {
   ngOnInit() {
     this.apiService.get().subscribe((response) => {
       this.organizationList=response;
-      console.log(response);
     });
 
     this.apiService.getProcesses().subscribe((response) => {
       this.processesList=response;
-      console.log(response);
     });
 
   }

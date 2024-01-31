@@ -38,7 +38,7 @@ export class myLayout implements Layout {
 
       defaultSettings: DagreSettings = {
         orientation: Orientation.LEFT_TO_RIGHT,
-        marginX: 40,
+        marginX: 250,
         marginY: 10,
         edgePadding: 0,
         rankPadding: 100,
@@ -59,26 +59,17 @@ export class myLayout implements Layout {
       run(graph: Graph): Graph {
         this.createDagreGraph(graph);
         dagre.layout(this.dagreGraph);
-        // console.log(dagre);
-    
         graph.edgeLabels = this.dagreGraph._edgeLabels;
     
-        
         const dagreToOutput = (node:Node) => {
           const dagreNode = this.dagreGraph._nodes[node.id];
-          // console.log("degere");
-          // console.log(this.dagreGraph);
-          // console.log(Object.keys(this.dagreGraph._preds[node.id]).length === 0);
         if(Object.keys(this.dagreGraph._preds[node.id]).length === 0){
           this.clusterID = this.dagreGraph._parent[node.id]
-           console.log(this.clusterID);
         }
-        // console.log(dagreNode);
+       
         if(dagreNode.data.shape === 'diamond' && dagreNode.dimension.height< 40 && dagreNode.dimension.width<40){
-          // console.log(dagreNode.dimension.height + "  "+ dagreNode.dimension.width + " "+ dagreNode.id)
           dagreNode.dimension.height= 1.5 * dagreNode.dimension.height;
           dagreNode.dimension.width= 1.5 * dagreNode.dimension.width;
-          // console.log(dagreNode.dimension.height + "  "+ dagreNode.dimension.width + " "+ dagreNode.id)
         }
 
           return {
@@ -97,8 +88,6 @@ export class myLayout implements Layout {
         const dagreToOutput2 = (node:Node) => {
           const dagreNode = this.dagreGraph._nodes[node.id];
           const dagreNode2 = this.dagreGraph._nodes[this.clusterID];
-          console.log(dagreNode);
-          console.log("degere");
           return {
             ...node,
             position: {
@@ -113,11 +102,7 @@ export class myLayout implements Layout {
           
         };
         graph.nodes = graph.nodes.map(dagreToOutput);
-        //this.gr = graph.nodes.map(dagreToOutput2);
         graph.clusters = (graph.clusters || []).map(dagreToOutput2);
-        // graph.nodes = graph.nodes.map(dagreToOutput);
-    
-        // console.log(graph);
         return graph;
       }
     
@@ -138,14 +123,7 @@ export class myLayout implements Layout {
             };
     
             edge.points = [startingPoint, endingPoint];
-            console.log("UUUUUUUUU");
         }
-        else{
-          console.log (" updateEdge  ERRRROR")
-        }
-        console.log("UUUUUUUUU");
-    
-        
         return graph;
 
     }
@@ -168,10 +146,8 @@ createDagreGraph(graph: Graph): any {
           compound: settings.compound,
         });
     
-        // Default to assigning a new object as a label for each new edge.
         this.dagreGraph.setDefaultEdgeLabel(() => {
           return {
-            /* empty */
           };
         });
     
@@ -218,9 +194,6 @@ createDagreGraph(graph: Graph): any {
             this.dagreGraph.setEdge(edge.source, edge.target);
           }
         }
-    
-        // console.log("hello");
-        // console.log(this.dagreGraph);
         return this.dagreGraph;
       }
 

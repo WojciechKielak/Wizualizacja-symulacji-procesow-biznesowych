@@ -12,8 +12,6 @@ import { GeneratorList } from './generator';
 import { PollList } from './poll';
 import { forkJoin } from 'rxjs';
 import { GateList } from './gate';
-import { interval } from 'rxjs';
-
 import { GateAndList } from './gateAnd';
 
 @Component({
@@ -25,10 +23,6 @@ export class ProcessesComponent implements OnInit{
   public layout: Layout = new myLayout ();
 
   myCurve: any = customCurve;
-  // myCurve: any = shape.curveStepAfter;
-  // myCurve: any = shape.curveStepBefore;
-  // myCurve: any = shape.curveStep;
-
   id: number =0;
   nodes: Node[] = [];
   links: Edge[] = [];
@@ -43,7 +37,6 @@ export class ProcessesComponent implements OnInit{
   orList: GateList[]=[];
   andList: GateAndList[]=[];
   isRunning: boolean = false;
-  //idSimulations: number[]=[];
   idSimulation!: number;
   idRunningSimulations: string[]=[];
   idRunningSimulation: string | undefined;
@@ -52,10 +45,7 @@ export class ProcessesComponent implements OnInit{
   
   step(element: PollList,event: EventList| undefined): void {
     while( event?.output != null ){
-      console.log("ID: "+ event?.id)
-      console.log(element.poll.nodes.find(value => value.id === event?.id.toString()));
       if(element.poll.nodes.find(value => value.id === event?.id.toString()) !== undefined)break;  
-      //if( event.id === element.startEvent!) element.poll?.links.push({ source:'0' , target: event.id.toString()});
       element.poll?.links.push({ source: event.id.toString() , target: event.output.toString()})
 
       if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
@@ -96,12 +86,8 @@ export class ProcessesComponent implements OnInit{
       }
       let nextId = event.output;
       event = this.eventList.find(value => value.id === event!.output);
-      console.log(event !== undefined);
-      console.log("GGGG");
       if(event !== undefined){
         if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
-          console.log("UND KON");
-          console.log(event);
           if(event?.output === null){
             if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
               let resorc = this.resourceList.find(value => value.id === event?.resource);
@@ -138,8 +124,6 @@ export class ProcessesComponent implements OnInit{
         while (nextGate)
           {
             let gateName='xor';
-            console.log("TUTEJ");
-            console.log(nextId);
             let gate = this.xorList.find(value => value.id === nextId);
             if(gate === undefined){
               gate = this.orList.find(value => value.id === nextId);
@@ -168,12 +152,9 @@ export class ProcessesComponent implements OnInit{
                 element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gate.id.toString());
               }
             }
-            console.log(gate === undefined);
             if(gate === undefined){
               let gateAnd = this.andList.find(value => value.id === nextId);
               gateName='and';
-              console.log(gateAnd === undefined);
-              console.log("ulala");
     
               if( gateAnd !== undefined){
                 if(element.poll.nodes.find(value => value.id === nextId.toString()) !== undefined)break;
@@ -190,16 +171,11 @@ export class ProcessesComponent implements OnInit{
                     label: resorc?.name,
                     childNodeIds: [gateAnd!.id.toString()]
                   })
-                  console.log("ulala 2");
                   if (gateAnd && gateAnd.id_list && gateAnd.id_list.length > 0)
                   {
-                    gateAnd!.id_list.forEach(el => {console.log(el);
-                      console.log("BUUUM");
+                    gateAnd!.id_list.forEach(el => {
                       event = this.eventList.find(value => value.id === el);
-                      console.log(gateAnd!.id.toString());
                       element.poll?.links.push({ source: gateAnd!.id.toString() , target: el.toString()});
-                      console.log("ALA");
-                      console.log(event);
                       if(event!== undefined){
                         this.step(element, event);
                         nextGate = false;
@@ -225,16 +201,11 @@ export class ProcessesComponent implements OnInit{
                 else{
                   let lane = element.poll.clusters.find(value => value.id === gateAnd?.resource.toString()+'P');
                   element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(gateAnd!.id.toString());
-                  console.log("ulala 3");
                   if (gateAnd && gateAnd.id_list && gateAnd.id_list.length > 0)
                   {
-                    gateAnd!.id_list.forEach(el => {console.log(el);
-                      console.log("BUUUM");
+                    gateAnd!.id_list.forEach(el => {
                       event = this.eventList.find(value => value.id === el);
-                      console.log(gateAnd!.id.toString());
                       element.poll?.links.push({ source: gateAnd!.id.toString() , target: el.toString()});
-                      console.log("ALA");
-                      console.log(event);
                       if(event!== undefined){
                         this.step(element, event);
                         nextGate = false;
@@ -259,27 +230,15 @@ export class ProcessesComponent implements OnInit{
               }
     
             }else{
-            console.log("BUUUM");
-            console.log(this.xorList);
-            console.log(gateName);
-            console.log(gate);
-            console.log(Object.keys(gate!.percentages));
             if (gate && gate.percentages && Object.keys(gate.percentages).length > 0){
-              Object.keys(gate!.percentages).forEach(el => {console.log(el);
-                console.log("BUUUM");
+              Object.keys(gate!.percentages).forEach(el => {
                 event = this.eventList.find(value => value.id.toString() === el);
-                console.log(event);
                 element.poll?.links.push({ source: gate!.id.toString() , target: el});
-                console.log("ALA 2");
-                console.log(event!== undefined);
                 if(event!== undefined){
-                  console.log("ALA 3");
                   this.step(element, event);
                   nextGate = false;
                 }
                 else{
-                  console.log("ALA 4");
-                  console.log("Next: "+ el);
                   nextId = Number(el);
                   nextGate = true;
                 }
@@ -295,22 +254,12 @@ export class ProcessesComponent implements OnInit{
               element.poll?.links.push({ source:gate.id.toString() , target: 'k'+gate.id.toString()});
             }
             
-            // gate?.parameters.forEach(element => {console.log(element)});
             }  
           }
         
       }
     }
-    console.log("FUUUCK P");
-    console.log( event?.id );
-    console.log( element.poll.nodes.find(value => value.id === event?.resource.toString()) === undefined );
-    console.log( element.startEvent);
-    console.log( (event?.id === element.startEvent)!);
-    console.log( event?.output === null);
-    //element.poll.nodes.find
     if( (event?.id === element.startEvent! || element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined) && event?.output === null ){
-      console.log("FUUUCKaaaa");
-      console.log(event?.id);
       if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
         let resorc = this.resourceList.find(value => value.id === event?.resource);
         element.poll!.clusters.push( {
@@ -323,12 +272,6 @@ export class ProcessesComponent implements OnInit{
         let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
         element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
       }
-      // let resorce = this.resourceList.find(value => value.id === event?.resource);
-      // element.poll!.clusters.push( {
-      //   id: event.resource.toString()+'P',
-      //   label: resorce?.name,
-      //   childNodeIds: [event.id.toString()]
-      // })
       if( event?.id === element.startEvent! ){
         element.poll!.nodes.push( {
           id: 's',
@@ -357,42 +300,6 @@ export class ProcessesComponent implements OnInit{
        let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
       element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k'+event.id.toString());
       }
-      
-    // if(element.poll.nodes.find(value => value.id === event?.id.toString()) === undefined){
-    //   console.log("UND KON");
-    //   console.log(event);
-    //   if(event?.output === null){
-    //     if( !element.poll?.clusters.find(value => value.id === event?.resource.toString() +'P')){
-    //       let resorc = this.resourceList.find(value => value.id === event?.resource);
-    //       element.poll!.clusters.push( {
-    //         id: event.resource.toString()+'P',
-    //         label: resorc?.name,
-    //         childNodeIds: [event.id.toString()]
-    //       })
-    //     }
-    //     else{
-    //       let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-    //       element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push(event.id.toString());
-    //     }
-  
-    //     element.poll!.nodes.push( {
-    //       id: event.id.toString(),
-    //       label: event.name,
-    //       data: {shape: '',task:event.type, monitor_pending: event.monitor_pending, 
-    //       monitor_execute: event.monitor_execute,monitor_realized:  event.monitor_realized}
-    //     });
-
-    //     element.poll!.nodes.push( {
-    //       id: 'k',
-    //       label: 'koniec',
-    //       data: {shape: 'circle'}
-    //     });
-    //     let lane = element.poll.clusters.find(value => value.id === event?.resource.toString()+'P');
-    //   element.poll.clusters[element.poll.clusters.indexOf(lane!)].childNodeIds!.push('k');
-    //   element.poll?.links.push({ source:event.id.toString() , target: 'k'});
-    //   }
-    // }
-    console.log(this.pollList);
   }
   ngOnInit(): void {
 
@@ -417,22 +324,12 @@ const idString = this.route.snapshot.paramMap.get('processesid');
         this.orList = ors;
         this.andList = ands;
 
-        console.log("przed");
-        console.log(this.eventList);
-        console.log(this.resourceList);
-        console.log(this.generatorList);
-        console.log(this.processesList);
-        console.log(this.xorList);
-        console.log(this.orList);
-        console.log(this.andList);
         if(this.processesList.length ===0) this.router.navigateByUrl('/models');
         this.processesList.forEach(element => {
           if (element.simulation !== undefined) {
             this.idSimulation= element.simulation;
           }
-          console.log(element.generator);
           const startEvent = this.generatorList.find(value => value.id === element.generator);
-          console.log( startEvent);
           this.pollList.push({ id: element.id, name: element.name, startEvent: startEvent?.event, poll:{
             nodes: [],
             clusters: [],
@@ -447,12 +344,6 @@ const idString = this.route.snapshot.paramMap.get('processesid');
           
         });
 
-        console.log("po");
-        console.log(this.pollList);
-        
-
-
-
       });
 
     } else {
@@ -462,7 +353,6 @@ const idString = this.route.snapshot.paramMap.get('processesid');
     console.error('processes/processes.component processid jest nullem');
   }
 
-  console.log("koniec");
   
   }
 
@@ -476,27 +366,17 @@ const idString = this.route.snapshot.paramMap.get('processesid');
   async onStop(){
     this.isRunning = false;
     try {
-      console.log("Przed stop");
       const data = await this.processesService.getEnd(this.idSimulation).toPromise();
-      console.log("Po stop");
-      console.log(data);
+
   } catch (error) {
       console.error("Wystąpił błąd podczas resecie symulacji", error);
   }
   }
   async onReset(){
     this.isRunning = false;
-    // this.processesService.getEnd(this.idSimulation).subscribe((response) => {
-    //   this.organizationList=response;
-    //   console.log(response);
-    // });
 
     try {
-      console.log("Przed reset");
       const data = await this.processesService.getEnd(this.idSimulation).toPromise();
-      console.log("Po reset");
-      console.log(data);
-
   } catch (error) {
       console.error("Wystąpił błąd podczas resetu symulacji", error);
   }
@@ -516,91 +396,24 @@ const idString = this.route.snapshot.paramMap.get('processesid');
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// onStart() {
-//   console.log("Start");
-//   this.isRunning = true;
-//   this.processesService.getRun(1);
-  
-//   const symulation = async () => {
-//     while (this.isRunning) {
-//       try {
-//         const data = await this.processesService.getEvents().toPromise(); // Poczekaj na dane
-        
-//         this.eventList = data;
-//         console.log(data);
-//         console.log("HH");
-
-//         this.pollList.forEach(element => {
-//           element.poll.nodes.forEach(eve => {
-//             if (eve.data.shape === "") {
-//               console.log(eve);
-//               console.log("ALA");
-//               let event = this.eventList.find(value => value.id.toString() === eve.id);
-//               if (event !== null) {
-//                 console.log("BASIA");
-//                 element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_pending = event!.monitor_pending;
-//               }
-//             }
-//           });
-//         });
-
-//         console.log("A");
-//         console.log(this.pollList);
-//       } catch (error) {
-//         console.error(error);
-//       }
-//       await this.sleep(1000); // Poczekaj 1 sekundę
-//     }
-//     console.log("koniec");
-//   }
-
-//   symulation();
-// }
   async onStart(){
-    console.log("Start");
     this.isRunning = true;
-    // this.processesService.getRun(this.idSimulation).subscribe(data => {
-    //   console.log("start");
-    //   console.log(data);
-    //   this.idRunningSimulation=data;
-    // });
     try {
-      console.log("Przed pobraniem danych");
       const data = await this.processesService.getRun(this.idSimulation).toPromise();
-      console.log("Po pobraniu danych");
-      console.log(data);
       this.idRunningSimulation = data;
       await this.sleep(100);
   } catch (error) {
-      console.error("Wystąpił błąd podczas pobierania danych", error);
-      // Dodaj odpowiednią obsługę błędu tutaj
   }
-    // for(let i = 0; i < this.idSimulations.length; i++) {
-    //   this.processesService.getRun(this.idSimulation).subscribe(data => {
-    //     console.log("start");
-    //     console.log(data);
-    //     this.idRunningSimulations.push(data);
-    //   });
-    // }
-    // this.processesService.getRun(1).subscribe(data => {
-    //   console.log(data);
-    // });
+
     const symulation = async () => {
         while (this.isRunning) {
-          const data = await this.processesService.getEvents().toPromise(); // Poczekaj na dane
+          const data = await this.processesService.getEvents().toPromise(); 
           this.eventList = data;
-          console.log(data);
-          console.log("HH");
           this.pollList.forEach(element => {
             element.poll.nodes.forEach( eve => {
               if( eve.data.shape === ""){
                 let event = this.eventList.find(value => value.id.toString() === eve.id);
                 if( event !== null ){
-                  console.log("nre " +  event!.monitor_realized);
-                  console.log(this.eventList);
-                  // element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_pending= event!.monitor_pending;
-                  // element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_execute= event!.monitor_execute;
-                  // element.poll.nodes[element.poll.nodes.indexOf(eve)].data.monitor_realized= event!.monitor_realized;
                   eve.data.monitor_pending= event!.monitor_pending;
                   eve.data.monitor_execute= event!.monitor_execute;
                   eve.data.monitor_realized= event!.monitor_realized;
@@ -609,26 +422,16 @@ const idString = this.route.snapshot.paramMap.get('processesid');
             })
 
           });
-          console.log("A");
-          console.log(this.pollList);
-          
-          
+
           this.processesService.getRunningSimulation(this.idRunningSimulation!).subscribe(async data => {
-            console.log(data);
             if( data === "SUCCEED"){
               this.isRunning = false;
-              //await this.sleep(1000);
               this.router.navigateByUrl(`/report/${this.idRunningSimulation}`);
             }
           });
           await this.sleep(1000);
-          // this.idRunningSimulations.forEach( async idSym =>{
-          //   let simulationStatus = await this.processesService.getRunningSimulation(idSym).toPromise(); // Poczekaj na dane
-          //   console.log(simulationStatus);
-          // })
-          
+
         }
-        console.log("koniec");
       }
     symulation();
 
