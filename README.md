@@ -1,28 +1,45 @@
-# Vbps
+# Wizualizacja Symulacji Procesów Biznesowych
+Użytkownikowi wyświetla się lista dostępnych organizacji, z której może dokonać wybrou interesującej go opcji. Na liście zostają wyświetlone nzwy frim. Po zaznaczeniu organizacji na liście użytkownikowi wyświetlają się informacje o organizacji czyli jakie procesy są w firmie. 
+Po wyborze organizacji użytkownikowi pokazuje się lista procesów biznesowych, które można symulować. Lista procesów w firmie jest dynamicznie generowana w oparciu o wcześniejszy wybór organizacji. Po wyborze procesu użytkownikowi pokazuje się graficznie przedstawienie procesu. Po wyświetleniu procesu użytkownik posiada możliwość dalszych zmian pocesu, ponieważ symulowana jest cała organizacaja a nie tylko jeden jej proces. Dowolna zmiana między procesami umożliwia wygodny podgląd procesów organizacji podczas trwania symulacji.
+Przycisk start  umożliwia uruchomienie symulacji całej organizacji. Po uruchomieniu symulacji użytkownik może skorzystać z dwóch funkcjonalności takiej jak zatrzymanie symulacji i resetowanie symulacji, opcje te są dostępne podczas trwania symulacji. Stop symulacji zatrzymuje trwającą symulację, umożliwia to analizę graficznego przedstawienia procesów w chwili naciśniecia przysiku zatrzymania. Resetowanie symulacji przywraca graficzne przedstawienie procesów do sytuacji sprzed uruchomienia symulacji.
+Po zakończeniu symulacji nastąpuje wyświetlenie raportu symulacji. Raport zawiera szczegółowe informacje na temat procesów i czynności zawartych w procesach organizacji.
+Aplikacja frontendowa napisana w Angular i Typescript.
+Interfejs wyboru organizacji:
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.0.
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/54b73f84-9a86-459d-96c6-40106b42be11)
 
-## Development server
+Ekran wyboru organizacji po dokonaniu wyboru:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/ffff9f5c-23c7-46fe-a854-f6815b18d3b4)
 
-## Code scaffolding
+Ekran symulacji po wybraniu procesu „Basen 2”:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/7cffaaa5-88d1-4a95-8d54-754ba1921ff7)
 
-## Build
+Ekran symulacji po zmianie procesu na „Basen 1”:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/5f119629-3cc1-477f-864f-df5eefe9ab76)
 
-## Running unit tests
+Interfejs użytkownika w trakcie trwania symulacji:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+ ![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/075cadb8-67f0-47ab-8963-4e9c8508acda)
 
-## Running end-to-end tests
+Podczas symulacji po bokach czynności aktualizowane są liczniki procesów oczekujących, realizowanych i zrealizowanych. Dodatkowo, jeżeli czynność jest realizowana to prostokąt zmienia kolor na zielony, a jeżeli oczekuje na zasób to na żółty.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Interfejs użytkownika po zmianie procesu na „Basen 2” w trakcie trwania symulacji:
 
-## Further help
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/53522b7b-c24f-4118-807a-4d11b7ea37c5)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# Wizualizacja-symulacji-procesow-biznesowych
+Interfejs użytkownika po zmianie procesu na „Basen 2” w trakcie trwania symulacji:
+
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/5f26ce4d-e4bd-41c8-af83-2ab332b96b25)
+
+Interfejs użytkownika po ponownym uruchomieniu symulacji:
+
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/5b190358-1fc4-4f3c-be05-590d96fff07b)
+
+Interfejs użytkownika z raportem symulacji:
+
+![image](https://github.com/WojciechKielak/Wizualizacja-symulacji-procesow-biznesowych/assets/120566154/26d75a0a-d4c9-40ac-8ebc-5a584b372ead)
+
+Zdjęcia z przebiegu symulacji zostały zrobione po podłączeniu aplikacji do silnika.
